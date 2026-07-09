@@ -1,0 +1,14 @@
+{
+  "name": "agentmail",
+  "interface": {
+    "displayName": "AgentMail Plugins"
+  },
+  "plugins": [
+    {
+      "name": "agentmail",
+      "source": { "source": "local", "path": "./" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Productivity"
+    }
+  ]
+}

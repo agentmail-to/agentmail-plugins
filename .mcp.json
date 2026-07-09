@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "agentmail": {
+      "command": "npx",
+      "args": ["-y", "agentmail-mcp"],
+      "env": {
+        "AGENTMAIL_API_KEY": ""
+      }
+    }
+  }
+}

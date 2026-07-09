@@ -1,7 +1,0 @@
-{
-  "name": "agentmail",
-  "description": "AgentMail email infrastructure for AI agents. Create inboxes, send/receive emails, manage threads, handle attachments, and automate email workflows.",
-  "author": {
-    "name": "AgentMail"
-  }
-}

@@ -163,6 +163,29 @@ const inbox = await client.inboxes.create({ clientId: "unique-idempotency-key" }
 inbox = client.inboxes.create(client_id="unique-idempotency-key")
 ```
 
+## MCP Tools
+
+When connected via the bundled MCP server (`agentmail-mcp`), use these tools instead of the SDK:
+
+| Tool | Description |
+|------|-------------|
+| `create_inbox` | Create a new email inbox |
+| `list_inboxes` | List all inboxes |
+| `get_inbox` | Get inbox details |
+| `delete_inbox` | Delete an inbox |
+| `send_message` | Send an email from an inbox |
+| `reply_to_message` | Reply to an existing message |
+| `list_threads` | List email threads in an inbox |
+| `get_thread` | Get thread details and messages |
+| `get_attachment` | Download an attachment |
+| `update_message` | Update message labels |
+
+## Best Practices
+
+- Always send both `text` and `html` for best deliverability
+- Use labels to organize messages (e.g. "outreach", "replied", "unreplied")
+- Use `clientId` for idempotent create operations
+
 ## Real-Time Events
 
 - [webhooks.md](references/webhooks.md) - HTTP-based notifications (requires public URL)
