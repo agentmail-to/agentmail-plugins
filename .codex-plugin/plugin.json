@@ -1,6 +1,6 @@
 {
   "name": "agentmail",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "AI-native email infrastructure for coding agents. Create inboxes, send and receive emails, manage threads, and automate email workflows.",
   "author": {
     "name": "AgentMail",
@@ -12,7 +12,7 @@
   "license": "MIT",
   "keywords": ["email", "inbox", "mcp", "ai-agent", "email-api"],
   "skills": "./skills/",
-  "mcpServers": "./.mcp.json",
+  "mcpServers": "./mcp-codex.json",
   "interface": {
     "displayName": "AgentMail",
     "shortDescription": "Email infrastructure for AI agents",

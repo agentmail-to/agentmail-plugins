@@ -1,6 +1,6 @@
 {
-  "mcpServers": {
-    "AgentMail": {
+  "mcp_servers": {
+    "agentmail": {
       "command": "npx",
       "args": ["-y", "agentmail-mcp"],
       "env": {

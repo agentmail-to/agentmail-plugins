@@ -1,0 +1,16 @@
+{
+  "name": "agentmail",
+  "owner": {
+    "name": "AgentMail",
+    "email": "support@agentmail.to"
+  },
+  "description": "Official AgentMail plugin marketplace. Email infrastructure for AI agents.",
+  "plugins": [
+    {
+      "name": "agentmail",
+      "source": "./",
+      "description": "AI-native email infrastructure for coding agents. Create inboxes, send and receive emails, manage threads, and automate email workflows.",
+      "category": "productivity"
+    }
+  ]
+}

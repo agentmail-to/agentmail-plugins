@@ -1,0 +1,15 @@
+{
+  "name": "agentmail",
+  "displayName": "AgentMail",
+  "version": "0.2.0",
+  "description": "AI-native email infrastructure for coding agents. Create inboxes, send and receive emails, manage threads, and automate email workflows.",
+  "author": {
+    "name": "AgentMail",
+    "email": "support@agentmail.to",
+    "url": "https://www.agentmail.to"
+  },
+  "homepage": "https://docs.agentmail.to",
+  "repository": "https://github.com/agentmail-to/agentmail-plugins",
+  "license": "MIT",
+  "keywords": ["email", "inbox", "mcp", "ai-agent", "email-api"]
+}
