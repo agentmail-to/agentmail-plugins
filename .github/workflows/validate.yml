@@ -28,6 +28,7 @@ jobs:
         run: python3 scripts/validate_repo.py
 
       - name: Check upstream compatibility
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         run: python3 scripts/check_compatibility.py
 
       - name: Validate Python SDK signatures
@@ -65,3 +66,4 @@ jobs:
         run: |
           npm install --global @anthropic-ai/claude-code
           claude plugin validate . --strict
+          claude plugin validate .claude-plugin/plugin.json --strict

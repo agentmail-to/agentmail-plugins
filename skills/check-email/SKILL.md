@@ -12,7 +12,7 @@ Use read operations to find the relevant mail, then fetch enough context to answ
 1. Resolve the inbox with `list_inboxes` when the user did not specify one.
 2. Use `search_messages` or `search_threads` for keywords; use list operations for recency, sender, recipient, label, or date filters.
 3. Follow pagination until the requested range is covered. Do not imply that the first page is the entire mailbox.
-4. Fetch the full message or thread before summarizing body content. List results can omit message bodies.
+4. Fetch the full thread with `get_thread` before summarizing body content. List and search results contain only previews; the MCP server has no message-level fetch tool.
 5. Prefer `extracted_text` or `extracted_html` for a reply’s new content; fall back to `text` or `html` only when extraction is unavailable.
 6. Present concise results with inbox, sender, subject, timestamp, message ID, and thread ID when useful.
 

@@ -30,6 +30,10 @@ When sources disagree, verify the shipped interface and document the discrepancy
 - Do not send, reply, delete, change credentials, or perform other external side effects in automated tests.
 - Require explicit confirmation before destructive mailbox operations.
 
+## Working in Claude Code
+
+Claude Code reads `CLAUDE.md`, not `AGENTS.md`. To auto-load this guidance there, run `ln -s AGENTS.md CLAUDE.md` locally; the symlink is gitignored so it never ships in the plugin. While the symlink exists, `claude plugin validate .claude-plugin/plugin.json --strict` reports a CLAUDE.md warning locally — CI validates the committed tree, which has no `CLAUDE.md`.
+
 ## Validation
 
 Run:

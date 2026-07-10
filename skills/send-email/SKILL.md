@@ -17,7 +17,7 @@ Use AgentMail MCP tools to prepare and deliver email without guessing externally
 ## Execute safely
 
 1. Resolve the sending inbox with `list_inboxes` when the user did not name one. If multiple candidates remain or listing is unavailable, ask for the exact sender inbox. Do not create an inbox unless the user asked for one.
-2. For replies or forwards, read the target message or thread and identify the exact message ID.
+2. For replies or forwards, fetch the thread with `get_thread` and identify the exact message ID.
 3. Preserve the user’s meaning. Do not invent recipients, attachments, claims, signatures, or commitments.
 4. Include plain text and HTML when both are available; keep their content equivalent.
 5. If any externally visible field was inferred, show the complete sender, recipients, subject, body, attachments, and action, then request confirmation before sending.
