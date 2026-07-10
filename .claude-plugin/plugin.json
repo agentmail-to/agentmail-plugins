@@ -1,15 +1,18 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "agentmail",
   "displayName": "AgentMail",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "AI-native email infrastructure for coding agents. Create inboxes, send and receive emails, manage threads, and automate email workflows.",
   "author": {
     "name": "AgentMail",
-    "email": "support@agentmail.to",
+    "email": "support@agentmail.cc",
     "url": "https://www.agentmail.to"
   },
   "homepage": "https://docs.agentmail.to",
   "repository": "https://github.com/agentmail-to/agentmail-plugins",
   "license": "MIT",
-  "keywords": ["email", "inbox", "mcp", "ai-agent", "email-api"]
+  "keywords": ["email", "inbox", "mcp", "ai-agent", "email-api"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
 }

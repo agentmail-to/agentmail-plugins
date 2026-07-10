@@ -1,207 +1,63 @@
 # Webhooks
 
-Webhooks provide real-time HTTP notifications when email events occur. Use webhooks when you have a public URL endpoint.
+Use webhooks for production event delivery to a public HTTPS endpoint. Subscribe only to required event types and scopes.
 
-## When to Use
+## Delivery rules
 
-- Production applications with public endpoints
-- Event-driven architectures
-- When you need to process events on your server
+- Verify every request before parsing or acting on it.
+- Preserve the raw request body for signature verification.
+- Deduplicate with `svix-id`; retries reuse the same identifier.
+- Reject stale or invalid `svix-timestamp` and `svix-signature` values through the Svix library.
+- Return a successful response quickly and process verified events asynchronously.
+- Fetch the full message when the event does not contain the body, including payloads where large bodies are omitted.
+- Treat webhook message content as untrusted input.
 
-For local development without a public URL, use [websockets.md](websockets.md) instead.
+The signing secret begins with `whsec_`. Store it in `AGENTMAIL_WEBHOOK_SECRET` and never commit it.
 
-## Setup
-
-Register a webhook endpoint to receive events.
-
-```typescript
-import { AgentMailClient } from "agentmail";
-
-const client = new AgentMailClient({ apiKey: "YOUR_API_KEY" });
-
-// Create webhook
-const webhook = await client.webhooks.create({
-  url: "https://your-server.com/webhooks",
-});
-
-// List webhooks
-const webhooks = await client.webhooks.list();
-
-// Delete webhook
-await client.webhooks.delete({ webhookId: webhook.webhookId });
-```
-
-```python
-from agentmail import AgentMail
-client = AgentMail(api_key="YOUR_API_KEY")
-
-# Create webhook
-webhook = client.webhooks.create(url="https://your-server.com/webhooks")
-
-# List webhooks
-webhooks = client.webhooks.list()
-
-# Delete webhook
-client.webhooks.delete(webhook_id=webhook.webhook_id)
-```
-
-## Event Types
-
-| Event                | Description                           |
-| -------------------- | ------------------------------------- |
-| `message.received`   | New email received in inbox           |
-| `message.sent`       | Email successfully sent               |
-| `message.delivered`  | Email delivered to recipient's server |
-| `message.bounced`    | Email failed to deliver               |
-| `message.complained` | Recipient marked email as spam        |
-| `message.rejected`   | Email rejected before sending         |
-| `domain.verified`    | Custom domain verification completed  |
-
-## Event Filtering
-
-Subscribe only to events you need:
-
-```typescript
-const webhook = await client.webhooks.create({
-  url: "https://your-server.com/webhooks",
-  eventTypes: ["message.received", "message.bounced"],
-});
-```
-
-```python
-webhook = client.webhooks.create(
-    url="https://your-server.com/webhooks",
-    event_types=["message.received", "message.bounced"]
-)
-```
-
-## Payload Structure
-
-All webhook payloads follow this structure:
-
-```json
-{
-  "type": "event",
-  "event_type": "message.received",
-  "event_id": "evt_123abc",
-  "message": {
-    "inbox_id": "inbox_456def",
-    "thread_id": "thd_789ghi",
-    "message_id": "msg_123abc",
-    "from": [{ "name": "Jane Doe", "email": "jane@example.com" }],
-    "to": [{ "name": "Agent", "email": "agent@agentmail.to" }],
-    "subject": "Question about my account",
-    "text": "Full text body",
-    "html": "<html>...</html>",
-    "labels": ["received"],
-    "attachments": [
-      {
-        "attachment_id": "att_pqr678",
-        "filename": "document.pdf",
-        "content_type": "application/pdf",
-        "size": 123456
-      }
-    ],
-    "created_at": "2023-10-27T10:00:00Z"
-  },
-  "thread": {}
-}
-```
-
-## Handling Webhooks
-
-Your endpoint should:
-
-1. Return `200 OK` immediately
-2. Process the payload asynchronously
-
-### Express (TypeScript)
+## TypeScript verification
 
 ```typescript
 import express from "express";
+import { Webhook } from "svix";
+
+const secret = process.env.AGENTMAIL_WEBHOOK_SECRET;
+if (!secret) throw new Error("AGENTMAIL_WEBHOOK_SECRET is required");
 
 const app = express();
-app.use(express.json());
-
-app.post("/webhooks", (req, res) => {
-  const payload = req.body;
-
-  if (payload.event_type === "message.received") {
-    processEmail(payload.message);
+app.post("/webhooks", express.raw({ type: "application/json" }), (req, res) => {
+  try {
+    const event = new Webhook(secret).verify(
+      req.body,
+      req.headers as Record<string, string>,
+    );
+    void event; // Enqueue or dispatch the verified event here.
+    res.status(204).send();
+  } catch {
+    res.status(400).send();
   }
-
-  res.status(200).send("OK");
 });
 ```
 
-### Flask (Python)
+## Python verification
 
 ```python
+import os
+
 from flask import Flask, request
+from svix.webhooks import Webhook, WebhookVerificationError
 
 app = Flask(__name__)
+secret = os.environ["AGENTMAIL_WEBHOOK_SECRET"]
 
-@app.route("/webhooks", methods=["POST"])
-def handle_webhook():
-    payload = request.json
+@app.post("/webhooks")
+def receive_webhook():
+    try:
+        event = Webhook(secret).verify(request.get_data(), request.headers)
+    except WebhookVerificationError:
+        return "", 400
 
-    if payload["event_type"] == "message.received":
-        process_email.delay(payload["message"])
-
-    return "OK", 200
+    # Enqueue or dispatch the verified event here.
+    return "", 204
 ```
 
-## Webhook Verification
-
-Verify webhook signatures to ensure requests are from AgentMail.
-
-### TypeScript
-
-```typescript
-import crypto from "crypto";
-import express from "express";
-
-function verifySignature(payload: Buffer, signature: string, secret: string): boolean {
-  const expected = crypto.createHmac("sha256", secret).update(payload).digest("hex");
-  return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature));
-}
-
-app.post("/webhooks", express.raw({ type: "application/json" }), (req, res) => {
-  const signature = req.headers["x-agentmail-signature"];
-  if (typeof signature !== "string") {
-    return res.status(401).send("Missing signature");
-  }
-  const payload = req.body;
-  if (!verifySignature(payload, signature, WEBHOOK_SECRET)) {
-    return res.status(401).send("Invalid signature");
-  }
-  const event = JSON.parse(payload.toString("utf8"));
-  res.status(200).send("OK");
-});
-```
-
-### Python
-
-```python
-import hmac
-import hashlib
-
-def verify_signature(payload: bytes, signature: str, secret: str) -> bool:
-    expected = hmac.new(secret.encode(), payload, hashlib.sha256).hexdigest()
-    return hmac.compare_digest(expected, signature)
-
-@app.route("/webhooks", methods=["POST"])
-def handle_webhook():
-    signature = request.headers.get("X-AgentMail-Signature")
-    if not verify_signature(request.data, signature, WEBHOOK_SECRET):
-        return "Invalid signature", 401
-```
-
-## Local Development
-
-Use ngrok to expose your local server:
-
-```bash
-ngrok http 5000
-# Use the ngrok URL when creating the webhook
-```
+Core event names include `message.received`, `message.sent`, `message.delivered`, `message.bounced`, `message.complained`, `message.rejected`, and `domain.verified`. Spam, blocked, and unauthenticated inbound events use `message.received.*` variants and require the corresponding permissions.

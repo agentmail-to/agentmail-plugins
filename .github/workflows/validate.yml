@@ -1,0 +1,67 @@
+name: Validate plugin
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "17 16 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate repository structure
+        run: python3 scripts/validate_repo.py
+
+      - name: Check upstream compatibility
+        run: python3 scripts/check_compatibility.py
+
+      - name: Validate Python SDK signatures
+        run: |
+          python3 -m pip install "agentmail==0.5.6"
+          python3 tests/test_sdk_signatures.py
+
+      - name: Type-check TypeScript SDK examples
+        run: |
+          tmp="$(mktemp -d)"
+          cp tests/sdk_typescript.ts tests/webhook_typescript.ts tests/package.json "$tmp/"
+          cd "$tmp"
+          npm install --no-save "agentmail@0.5.14" "agentmail-toolkit@0.4.2" "ai@6" "svix" "express" "@types/express" "typescript@5.9.3" "@types/node@22"
+          ./node_modules/.bin/tsc --noEmit --strict --skipLibCheck --target ES2022 --module NodeNext --moduleResolution NodeNext sdk_typescript.ts webhook_typescript.ts
+
+      - name: Validate CLI command names
+        run: |
+          npx -y agentmail-cli@0.7.12 inboxes --help | tee /tmp/inboxes-help
+          npx -y agentmail-cli@0.7.12 inboxes:messages --help | tee /tmp/messages-help
+          grep -q "get" /tmp/inboxes-help
+          grep -q "get" /tmp/messages-help
+          ! grep -q "retrieve" /tmp/inboxes-help
+          ! grep -q "retrieve" /tmp/messages-help
+
+      - name: Validate Codex marketplace installation
+        run: |
+          npm install --global @openai/codex
+          codex_home="$(mktemp -d)"
+          CODEX_HOME="$codex_home" codex plugin marketplace add . --json
+          CODEX_HOME="$codex_home" codex plugin list --available --json | tee /tmp/codex-plugins.json
+          grep -q '"pluginId": "agentmail@agentmail"' /tmp/codex-plugins.json
+          CODEX_HOME="$codex_home" codex plugin add agentmail@agentmail --json
+
+      - name: Validate Claude plugin
+        run: |
+          npm install --global @anthropic-ai/claude-code
+          claude plugin validate . --strict
