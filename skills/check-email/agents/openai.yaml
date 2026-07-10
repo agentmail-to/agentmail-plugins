@@ -1,0 +1,13 @@
+interface:
+  display_name: "Check Email"
+  short_description: "Read and triage AgentMail inboxes"
+  default_prompt: "Use $check-email to find and summarize important AgentMail messages."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "agentmail"
+      description: "AgentMail hosted MCP server"
+      transport: "streamable_http"
+      url: "https://mcp.agentmail.to/mcp"
+policy:
+  allow_implicit_invocation: true

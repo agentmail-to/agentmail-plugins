@@ -1,0 +1,90 @@
+# Python SDK
+
+These examples target `agentmail` 0.5.6. Python methods use snake_case, and configured organization-level inbox creation uses a request object.
+
+## Inboxes
+
+```python
+from agentmail.inboxes.types import CreateInboxRequest
+
+inbox = client.inboxes.create(
+    request=CreateInboxRequest(
+        username="support",
+        display_name="Support Agent",
+        client_id="support-v1",
+        metadata={"tenant": "acme"},
+    )
+)
+
+page = client.inboxes.list(limit=20)
+fetched = client.inboxes.get(inbox_id=inbox.inbox_id)
+client.inboxes.update(inbox_id=inbox.inbox_id, display_name="Customer Support")
+```
+
+Use `client.pods.inboxes.*` for pod-scoped inbox operations; do not pass `pod_id` to organization-level `client.inboxes.*` methods.
+
+## Messages and threads
+
+```python
+sent = client.inboxes.messages.send(
+    inbox_id=inbox.inbox_id,
+    to="customer@example.com",
+    subject="Hello",
+    text="Plain-text body",
+    html="<p>Plain-text body</p>",
+)
+
+messages = client.inboxes.messages.list(inbox_id=inbox.inbox_id, limit=20)
+message = client.inboxes.messages.get(
+    inbox_id=inbox.inbox_id,
+    message_id="msg_123",
+)
+body = message.extracted_text or message.text or message.extracted_html or message.html
+
+client.inboxes.messages.reply(
+    inbox_id=inbox.inbox_id,
+    message_id=message.message_id,
+    text="Thanks for the update.",
+)
+
+client.inboxes.messages.forward(
+    inbox_id=inbox.inbox_id,
+    message_id=message.message_id,
+    to="teammate@example.com",
+    text="For your review.",
+)
+
+threads = client.inboxes.threads.list(inbox_id=inbox.inbox_id, limit=20)
+thread = client.inboxes.threads.get(
+    inbox_id=inbox.inbox_id,
+    thread_id=message.thread_id,
+)
+```
+
+Follow `next_page_token` when it is present. Use the `search` methods on inbox messages or threads for full-text queries.
+
+## Drafts and attachments
+
+```python
+draft = client.inboxes.drafts.create(
+    inbox_id=inbox.inbox_id,
+    to="customer@example.com",
+    subject="Pending approval",
+    text="Draft content",
+    client_id="draft-customer-123",
+)
+
+client.inboxes.drafts.update(
+    inbox_id=inbox.inbox_id,
+    draft_id=draft.draft_id,
+    text="Revised draft content",
+)
+
+attachment = client.inboxes.messages.get_attachment(
+    inbox_id=inbox.inbox_id,
+    message_id=message.message_id,
+    attachment_id="att_456",
+)
+```
+
+Send attachments with either base64 `content` or a supported `url`, plus `filename` and `content_type`.

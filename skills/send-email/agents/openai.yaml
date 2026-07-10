@@ -1,0 +1,13 @@
+interface:
+  display_name: "Send Email"
+  short_description: "Draft and send AgentMail email"
+  default_prompt: "Use $send-email to prepare and send an AgentMail message safely."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "agentmail"
+      description: "AgentMail hosted MCP server"
+      transport: "streamable_http"
+      url: "https://mcp.agentmail.to/mcp"
+policy:
+  allow_implicit_invocation: true

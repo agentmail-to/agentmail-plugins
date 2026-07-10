@@ -1,10 +1,10 @@
 {
   "name": "agentmail",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "AI-native email infrastructure for coding agents. Create inboxes, send and receive emails, manage threads, and automate email workflows.",
   "author": {
     "name": "AgentMail",
-    "email": "support@agentmail.to",
+    "email": "support@agentmail.cc",
     "url": "https://www.agentmail.to"
   },
   "homepage": "https://docs.agentmail.to",
@@ -12,7 +12,7 @@
   "license": "MIT",
   "keywords": ["email", "inbox", "mcp", "ai-agent", "email-api"],
   "skills": "./skills/",
-  "mcpServers": "./mcp-codex.json",
+  "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "AgentMail",
     "shortDescription": "Email infrastructure for AI agents",
@@ -21,10 +21,12 @@
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
     "websiteURL": "https://www.agentmail.to",
+    "privacyPolicyURL": "https://www.agentmail.to/legal/privacy-policy",
+    "termsOfServiceURL": "https://www.agentmail.to/legal/terms-of-service",
     "defaultPrompt": [
-      "Create a new email inbox for my project and send a test email.",
+      "Create a new project inbox and draft a welcome email.",
       "Check my AgentMail inbox for new messages and summarize unread threads.",
-      "Reply to the latest email thread in my inbox."
+      "Prepare a reply to the latest email in my inbox."
     ],
     "brandColor": "#6366F1",
     "composerIcon": "./assets/logo.svg",

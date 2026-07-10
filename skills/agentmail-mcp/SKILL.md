@@ -1,225 +1,74 @@
 ---
 name: agentmail-mcp
-description: AgentMail MCP server for email tools in AI assistants. Use when setting up AgentMail with Claude Desktop, Cursor, VS Code, Windsurf, or other MCP-compatible clients. Provides tools for inbox management, sending/receiving emails, and thread handling.
+description: Configure or troubleshoot the hosted AgentMail MCP server for Codex, Claude Code, Cursor, or another Streamable HTTP MCP client. Use for installation, OAuth, API-key headers, connection failures, or MCP tool discovery; do not use for SDK code or direct email operations.
 ---
 
-# AgentMail MCP Server
+# AgentMail MCP
 
-Connect AgentMail to any MCP-compatible AI client. Three setup options available.
+Prefer the hosted Streamable HTTP server:
 
-## Prerequisites
+```text
+https://mcp.agentmail.to/mcp
+```
 
-Get your API key from [console.agentmail.to](https://console.agentmail.to).
+It avoids a local Node.js process and the slower release cadence of the published local MCP package.
 
----
+## Claude Code, Codex, and Cursor
 
-## Option 1: Remote MCP (Simplest)
-
-No installation required. Connect directly to the hosted MCP server.
-
-**URL:** `https://mcp.agentmail.to`
-
-Add to your MCP client configuration:
+Use OAuth. Do not put an empty API key in the configuration.
 
 ```json
 {
   "mcpServers": {
-    "AgentMail": {
-      "url": "https://mcp.agentmail.to",
-      "env": {
-        "AGENTMAIL_API_KEY": "YOUR_API_KEY"
-      }
+    "agentmail": {
+      "type": "http",
+      "url": "https://mcp.agentmail.to/mcp"
     }
   }
 }
 ```
 
----
-
-## Option 2: Local npm Package
-
-Run the MCP server locally via npx.
-
-```json
-{
-  "mcpServers": {
-    "AgentMail": {
-      "command": "npx",
-      "args": ["-y", "agentmail-mcp"],
-      "env": {
-        "AGENTMAIL_API_KEY": "YOUR_API_KEY"
-      }
-    }
-  }
-}
-```
-
-### Tool Selection
-
-Load only specific tools with the `--tools` argument:
-
-```json
-{
-  "mcpServers": {
-    "AgentMail": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "agentmail-mcp",
-        "--tools",
-        "send_message,reply_to_message,list_inboxes"
-      ],
-      "env": {
-        "AGENTMAIL_API_KEY": "YOUR_API_KEY"
-      }
-    }
-  }
-}
-```
-
----
-
-## Option 3: Local Python Package
-
-Install and run the Python MCP server.
+Claude Code can also install it directly:
 
 ```bash
-pip install agentmail-mcp
+claude mcp add --transport http agentmail https://mcp.agentmail.to/mcp
 ```
 
-### Claude Desktop
+Complete the browser sign-in on first connection. Multi-organization OAuth sessions can use the server’s organization-selection tools.
 
-Config location:
+## Clients without OAuth
 
-- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
-- Windows: `%APPDATA%/Claude/claude_desktop_config.json`
+For a Streamable HTTP client that cannot complete OAuth, export `AGENTMAIL_API_KEY` and send it as a header:
 
 ```json
 {
   "mcpServers": {
-    "AgentMail": {
-      "command": "/path/to/your/.venv/bin/agentmail-mcp",
-      "env": {
-        "AGENTMAIL_API_KEY": "YOUR_API_KEY"
+    "agentmail": {
+      "type": "http",
+      "url": "https://mcp.agentmail.to/mcp",
+      "headers": {
+        "x-api-key": "${env:AGENTMAIL_API_KEY}"
       }
     }
   }
 }
 ```
 
-Find your path:
+Avoid query-string credentials when header authentication is available.
 
-```bash
-# Activate your virtual environment, then:
-which agentmail-mcp
-```
+## Verify
 
-### Run Standalone
+1. Restart the client or open a new session after installing the plugin.
+2. Inspect MCP status in the client and complete authentication.
+3. Call `list_inboxes` as a read-only smoke test.
+4. Confirm that read, write, and destructive tool annotations produce the expected approval behavior.
 
-```bash
-export AGENTMAIL_API_KEY=your-api-key
-agentmail-mcp
-```
+The hosted server covers core inbox, message, thread, search, draft, attachment, and identity operations. Discover the live tool inventory from the MCP server instead of relying on a copied tool count.
 
----
+## Troubleshoot
 
-## Available Tools
-
-| Tool               | Description                     |
-| ------------------ | ------------------------------- |
-| `create_inbox`     | Create a new email inbox        |
-| `list_inboxes`     | List all inboxes                |
-| `get_inbox`        | Get inbox details by ID         |
-| `delete_inbox`     | Delete an inbox                 |
-| `send_message`     | Send an email from an inbox     |
-| `reply_to_message` | Reply to an existing message    |
-| `list_threads`     | List email threads in an inbox  |
-| `get_thread`       | Get thread details and messages |
-| `get_attachment`   | Download an attachment          |
-| `update_message`   | Update message labels           |
-
----
-
-## Client Configuration
-
-### Cursor, VS Code, Windsurf
-
-Add the same MCP server entry in your client config file:
-
-Cursor: `.cursor/mcp.json`
-VS Code: `.vscode/mcp.json`
-Windsurf: MCP config file
-
-```json
-{
-  "mcpServers": {
-    "AgentMail": {
-      "command": "npx",
-      "args": ["-y", "agentmail-mcp"],
-      "env": {
-        "AGENTMAIL_API_KEY": "YOUR_API_KEY"
-      }
-    }
-  }
-}
-```
-
----
-
-## Compatible Clients
-
-The AgentMail MCP server works with any MCP-compatible client:
-
-- Claude Desktop
-- Cursor
-- VS Code
-- Windsurf
-- Cline
-- Goose
-- Raycast
-- ChatGPT
-- Amazon Q
-- Codex
-- Gemini CLI
-- LibreChat
-- Roo Code
-- And more...
-
----
-
-## Example Usage
-
-Once configured, you can ask your AI assistant:
-
-- "Create a new inbox for support emails"
-- "Send an email to john@example.com with subject 'Hello'"
-- "Check my inbox for new messages"
-- "Reply to the latest email thanking them"
-- "List all my email threads"
-- "Download the attachment from the last message"
-
----
-
-## Troubleshooting
-
-### "Command not found"
-
-Ensure npm/npx is in your PATH, or use the full path:
-
-```json
-"command": "/usr/local/bin/npx"
-```
-
-### "Invalid API key"
-
-Verify your API key is correct and has the necessary permissions.
-
-### Python package not found
-
-Use the full path to the agentmail-mcp executable in your virtual environment:
-
-```bash
-# Find the path
-source /path/to/venv/bin/activate
-which agentmail-mcp
-```
+- A 404 usually means the URL is missing `/mcp`.
+- A 401 with OAuth usually means the sign-in is incomplete or the session expired.
+- A 401 with API-key auth usually means `AGENTMAIL_API_KEY` was not available to the client process or the key was revoked.
+- Use the full `am_` key value and prefer the narrowest suitable organization, pod, or inbox scope.
+- The published local `agentmail-mcp` package may lag the hosted API. Use it only after verifying its installed SDK and toolkit versions against the required features.

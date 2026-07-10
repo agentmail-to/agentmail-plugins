@@ -1,0 +1,4 @@
+interface:
+  display_name: "AgentMail Toolkit"
+  short_description: "Add email tools to agent frameworks"
+  default_prompt: "Use $agentmail-toolkit to add AgentMail tools to an agent framework."

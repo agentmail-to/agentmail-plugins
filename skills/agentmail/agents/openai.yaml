@@ -1,0 +1,4 @@
+interface:
+  display_name: "AgentMail SDK"
+  short_description: "Build AgentMail SDK integrations"
+  default_prompt: "Use $agentmail to implement a current AgentMail SDK workflow."
