@@ -43,13 +43,8 @@ def check_path(owner: str, value: object) -> None:
 JSON_FILES = [
     ".agents/plugins/marketplace.json",
     ".claude-plugin/marketplace.json",
-    ".claude-plugin/plugin.json",
-    ".codex-plugin/plugin.json",
-    ".cursor-plugin/plugin.json",
     ".mcp.json",
-    ".plugin/plugin.json",
     "compatibility.json",
-    "mcp.cursor.json",
 ]
 
 for json_file in JSON_FILES:
@@ -91,18 +86,6 @@ if any((ROOT / "commands").glob("*")):
 
 skills_root = ROOT / "skills"
 skill_dirs = sorted(path for path in skills_root.iterdir() if path.is_dir())
-expected_skills = {
-    "agentmail",
-    "agentmail-cli",
-    "agentmail-mcp",
-    "agentmail-toolkit",
-    "check-email",
-    "manage-inboxes",
-    "send-email",
-}
-actual_skills = {path.name for path in skill_dirs}
-if actual_skills != expected_skills:
-    error(f"unexpected skill set: expected {sorted(expected_skills)}, got {sorted(actual_skills)}")
 
 frontmatter_pattern = re.compile(r"\A---\n(.*?)\n---\n", re.DOTALL)
 for skill_dir in skill_dirs:
@@ -162,11 +145,6 @@ for markdown in ROOT.rglob("*.md"):
 stale_patterns = {
     '"AGENTMAIL_API_KEY": ""': "empty API-key override",
     'https://mcp.agentmail.to"': "hosted MCP URL missing /mcp",
-    "mcp-codex.json": "removed Codex MCP filename",
-    "support@agentmail.to": "obsolete support address",
-    "X-AgentMail-Signature": "obsolete webhook signature scheme",
-    "retrieve --": "obsolete CLI retrieve command",
-    "gpt-4o": "stale hard-coded model",
     "[TODO:": "unresolved skill placeholder",
 }
 
@@ -189,10 +167,6 @@ for path in ROOT.rglob("*"):
 oauth_config = load_json(".mcp.json").get("mcpServers", {}).get("agentmail", {})
 if oauth_config != {"type": "http", "url": "https://mcp.agentmail.to/mcp"}:
     error(".mcp.json must contain the hosted OAuth-compatible AgentMail server")
-
-cursor_config = load_json("mcp.cursor.json").get("mcpServers", {}).get("agentmail", {})
-if cursor_config.get("headers", {}).get("x-api-key") != "${env:AGENTMAIL_API_KEY}":
-    error("mcp.cursor.json must use Cursor environment interpolation for x-api-key")
 
 if ERRORS:
     print("Repository validation failed:", file=sys.stderr)

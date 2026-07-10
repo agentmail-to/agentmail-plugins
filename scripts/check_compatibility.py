@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import json
 import sys
-import time
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -17,17 +16,9 @@ HEADERS = {"User-Agent": "agentmail-plugins-compatibility-check/0.3.0"}
 
 
 def fetch_json(url: str) -> dict:
-    last_error: Exception | None = None
-    for attempt in range(3):
-        try:
-            request = urllib.request.Request(url, headers=HEADERS)
-            with urllib.request.urlopen(request, timeout=20) as response:
-                return json.load(response)
-        except (OSError, ValueError, urllib.error.URLError) as exc:
-            last_error = exc
-            if attempt < 2:
-                time.sleep(2**attempt)
-    raise RuntimeError(f"failed to fetch {url}: {last_error}")
+    request = urllib.request.Request(url, headers=HEADERS)
+    with urllib.request.urlopen(request, timeout=20) as response:
+        return json.load(response)
 
 
 actual = {

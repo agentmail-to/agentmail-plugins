@@ -12,7 +12,5 @@
   "homepage": "https://docs.agentmail.to",
   "repository": "https://github.com/agentmail-to/agentmail-plugins",
   "license": "MIT",
-  "keywords": ["email", "inbox", "mcp", "ai-agent", "email-api"],
-  "skills": "./skills/",
-  "mcpServers": "./.mcp.json"
+  "keywords": ["email", "inbox", "mcp", "ai-agent", "email-api"]
 }

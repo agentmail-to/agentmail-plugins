@@ -12,5 +12,5 @@
   "keywords": ["email", "inbox", "mcp", "ai-agent", "email-api"],
   "logo": "./assets/logo.svg",
   "skills": "./skills/",
-  "mcpServers": "./mcp.cursor.json"
+  "mcpServers": "./.mcp.json"
 }

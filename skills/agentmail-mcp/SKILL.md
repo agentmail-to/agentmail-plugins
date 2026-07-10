@@ -13,7 +13,7 @@ https://mcp.agentmail.to/mcp
 
 It avoids a local Node.js process and the slower release cadence of the published local MCP package.
 
-## Claude Code and Codex
+## Claude Code, Codex, and Cursor
 
 Use OAuth. Do not put an empty API key in the configuration.
 
@@ -36,9 +36,9 @@ claude mcp add --transport http agentmail https://mcp.agentmail.to/mcp
 
 Complete the browser sign-in on first connection. Multi-organization OAuth sessions can use the server’s organization-selection tools.
 
-## Cursor
+## Clients without OAuth
 
-Export `AGENTMAIL_API_KEY`, then use an environment-backed header:
+For a Streamable HTTP client that cannot complete OAuth, export `AGENTMAIL_API_KEY` and send it as a header:
 
 ```json
 {
@@ -68,7 +68,7 @@ The hosted server covers core inbox, message, thread, search, draft, attachment,
 ## Troubleshoot
 
 - A 404 usually means the URL is missing `/mcp`.
-- A 401 in Claude or Codex usually means OAuth is incomplete or expired.
-- A 401 in Cursor usually means `AGENTMAIL_API_KEY` was not available to the Cursor process or the key was revoked.
+- A 401 with OAuth usually means the sign-in is incomplete or the session expired.
+- A 401 with API-key auth usually means `AGENTMAIL_API_KEY` was not available to the client process or the key was revoked.
 - Use the full `am_` key value and prefer the narrowest suitable organization, pod, or inbox scope.
 - The published local `agentmail-mcp` package may lag the hosted API. Use it only after verifying its installed SDK and toolkit versions against the required features.

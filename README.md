@@ -48,13 +48,7 @@ mkdir -p ~/.cursor/plugins/local
 ln -s "$(pwd)/agentmail-plugins" ~/.cursor/plugins/local/agentmail
 ```
 
-Reload Cursor after creating the link. Before starting Cursor, expose an AgentMail API key to its environment:
-
-```bash
-export AGENTMAIL_API_KEY="am_..."
-```
-
-The plugin sends the key to the hosted MCP server through an `x-api-key` header.
+Reload Cursor after creating the link, then complete the AgentMail OAuth browser sign-in when the MCP server first connects.
 
 ## Authentication
 
@@ -62,7 +56,7 @@ The plugin sends the key to the hosted MCP server through an `x-api-key` header.
 | --- | --- | --- |
 | Codex | Hosted MCP with OAuth | No |
 | Claude Code | Hosted MCP with OAuth | No |
-| Cursor | Hosted MCP with `x-api-key` | Yes |
+| Cursor | Hosted MCP with OAuth | No |
 | SDK and CLI | `AGENTMAIL_API_KEY` | Yes |
 
 The hosted endpoint is `https://mcp.agentmail.to/mcp`. Do not put credentials in the repository or use an empty environment override.
@@ -74,21 +68,6 @@ The hosted endpoint is `https://mcp.agentmail.to/mcp`. Do not put credentials in
 - Inbox deletion always requires confirmation of the exact address.
 - Use scoped AgentMail keys and the narrowest permissions suitable for the workflow.
 - Verify webhook requests with Svix before parsing or processing them.
-
-## Repository structure
-
-```text
-├── .plugin/plugin.json          # Open Plugins manifest
-├── .claude-plugin/              # Claude manifest and marketplace
-├── .cursor-plugin/plugin.json   # Cursor manifest
-├── .codex-plugin/plugin.json    # Codex manifest
-├── .agents/plugins/             # Codex marketplace
-├── skills/                      # Portable Agent Skills
-├── .mcp.json                    # OAuth MCP config for Claude/Codex
-├── mcp.cursor.json              # Cursor API-key MCP config
-├── compatibility.json           # Verified upstream versions
-└── scripts/                     # Repository validation and drift checks
-```
 
 ## Development
 
