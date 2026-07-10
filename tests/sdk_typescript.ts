@@ -1,5 +1,17 @@
 import { AgentMailClient } from "agentmail";
 import { AgentMailToolkit } from "agentmail-toolkit/ai-sdk";
+import { AgentMailToolkit as LangChainAgentMailToolkit } from "agentmail-toolkit/langchain";
+import { AgentMailToolkit as McpAgentMailToolkit } from "agentmail-toolkit/mcp";
+import { createAgent } from "langchain";
+
+function typecheckToolkitAdapters(client: AgentMailClient): void {
+  void createAgent({
+    model: process.env.LANGCHAIN_MODEL!,
+    tools: new LangChainAgentMailToolkit().getTools(),
+    systemPrompt: "Use email tools only when the user authorizes the external action.",
+  });
+  void new McpAgentMailToolkit(client).getTools();
+}
 
 async function typecheckCurrentSdk(client: AgentMailClient): Promise<void> {
   void new AgentMailToolkit();
@@ -66,3 +78,4 @@ async function typecheckWebSocket(client: AgentMailClient): Promise<void> {
 
 void typecheckCurrentSdk;
 void typecheckWebSocket;
+void typecheckToolkitAdapters;

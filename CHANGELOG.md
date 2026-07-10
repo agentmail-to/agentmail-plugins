@@ -8,6 +8,8 @@ All notable changes to the AgentMail plugin are documented here.
 - Replace legacy commands with portable `send-email`, `check-email`, and `manage-inboxes` skills.
 - Update SDK, CLI, toolkit, webhook, and WebSocket guidance for current AgentMail releases.
 - Add plugin validation, compatibility tracking, legal metadata, and repository maintenance instructions.
+- Run blocking CI against pinned upstream versions only; move upstream drift detection to a weekly scheduled workflow.
+- Add executable Svix webhook verification tests and verified LangChain and MCP toolkit adapter examples.
 
 ## 0.2.0 - 2026-07-09
 

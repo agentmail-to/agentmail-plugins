@@ -32,6 +32,29 @@ const result = await streamText({
 });
 ```
 
+### LangChain
+
+```typescript
+import { createAgent } from "langchain";
+import { AgentMailToolkit } from "agentmail-toolkit/langchain";
+
+const agent = createAgent({
+  model: process.env.LANGCHAIN_MODEL!,
+  tools: new AgentMailToolkit().getTools(),
+  systemPrompt: "Use email tools only when the user authorizes the external action.",
+});
+```
+
+### MCP server tools
+
+```typescript
+import { AgentMailToolkit } from "agentmail-toolkit/mcp";
+
+const tools = new AgentMailToolkit().getTools();
+```
+
+Each tool provides a name, title, description, input schema, callback, and annotations for registration on your own MCP server. The Python package does not ship an MCP adapter.
+
 ### Existing client
 
 ```typescript
@@ -70,6 +93,21 @@ toolkit = AgentMailToolkit(client=client)
 ```
 
 The toolkit constructor accepts an SDK client, not an `api_key` option.
+
+### LangChain
+
+```python
+import os
+
+from agentmail_toolkit.langchain import AgentMailToolkit
+from langchain.agents import create_agent
+
+agent = create_agent(
+    model=os.environ["LANGCHAIN_MODEL"],
+    tools=AgentMailToolkit().get_tools(),
+    system_prompt="Use email tools only when the user authorizes the external action.",
+)
+```
 
 ### LiveKit Agents
 

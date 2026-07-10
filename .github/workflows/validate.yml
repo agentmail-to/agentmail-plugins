@@ -3,8 +3,6 @@ name: Validate plugin
 on:
   push:
   pull_request:
-  schedule:
-    - cron: "17 16 * * 1"
   workflow_dispatch:
 
 permissions:
@@ -27,22 +25,24 @@ jobs:
       - name: Validate repository structure
         run: python3 scripts/validate_repo.py
 
-      - name: Check upstream compatibility
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-        run: python3 scripts/check_compatibility.py
-
       - name: Validate Python SDK signatures
         run: |
           python3 -m pip install "agentmail==0.5.6"
           python3 tests/test_sdk_signatures.py
 
-      - name: Type-check TypeScript SDK examples
+      - name: Run Python webhook verification fixtures
+        run: |
+          python3 -m pip install svix
+          python3 tests/test_webhook_verification.py
+
+      - name: Type-check and run TypeScript SDK examples
         run: |
           tmp="$(mktemp -d)"
-          cp tests/sdk_typescript.ts tests/webhook_typescript.ts tests/package.json "$tmp/"
+          cp tests/sdk_typescript.ts tests/webhook_typescript.ts tests/webhook_verification.ts tests/package.json "$tmp/"
           cd "$tmp"
-          npm install --no-save "agentmail@0.5.14" "agentmail-toolkit@0.4.2" "ai@6" "svix" "express" "@types/express" "typescript@5.9.3" "@types/node@22"
-          ./node_modules/.bin/tsc --noEmit --strict --skipLibCheck --target ES2022 --module NodeNext --moduleResolution NodeNext sdk_typescript.ts webhook_typescript.ts
+          npm install --no-save "agentmail@0.5.14" "agentmail-toolkit@0.4.2" "ai@6" "langchain@1" "svix" "express" "@types/express" "typescript@5.9.3" "tsx" "@types/node@22"
+          ./node_modules/.bin/tsc --noEmit --strict --skipLibCheck --target ES2022 --module NodeNext --moduleResolution NodeNext sdk_typescript.ts webhook_typescript.ts webhook_verification.ts
+          ./node_modules/.bin/tsx webhook_verification.ts
 
       - name: Validate CLI command names
         run: |
