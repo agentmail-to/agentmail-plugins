@@ -2,6 +2,11 @@
 
 All notable changes to the AgentMail plugin are documented here.
 
+## Unreleased
+
+- Track AgentMail Toolkit TypeScript 0.5.0 and Python 0.3.0.
+- Document the toolkit's structured-output contract (every tool declares an output schema; MCP calls return validated `structuredContent`) and its framework-native error signaling (adapters throw / MCP returns `isError` on failure, instead of returning an error string). **Blocked on the 0.5.0 / 0.3.0 npm and PyPI publish — the compatibility CI gate stays red until those versions are the registry `latest`.**
+
 ## 0.3.0 - 2026-07-10
 
 - Use the hosted AgentMail MCP server with OAuth for Claude, Codex, and Cursor.
