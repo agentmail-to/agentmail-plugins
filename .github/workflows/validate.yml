@@ -41,7 +41,7 @@ jobs:
           tmp="$(mktemp -d)"
           cp tests/sdk_typescript.ts tests/webhook_typescript.ts tests/webhook_verification.ts tests/package.json "$tmp/"
           cd "$tmp"
-          npm install --no-save "agentmail@0.5.14" "agentmail-toolkit@0.4.2" "ai@6" "langchain@1" "svix" "express" "@types/express" "typescript@5.9.3" "tsx" "@types/node@22"
+          npm install --no-save "agentmail@0.5.14" "agentmail-toolkit@0.5.0" "ai@6" "langchain@1" "svix" "express" "@types/express" "typescript@5.9.3" "tsx" "@types/node@22"
           ./node_modules/.bin/tsc --noEmit --strict --skipLibCheck --target ES2022 --module NodeNext --moduleResolution NodeNext sdk_typescript.ts webhook_typescript.ts webhook_verification.ts
           ./node_modules/.bin/tsx webhook_verification.ts
 
