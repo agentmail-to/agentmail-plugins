@@ -71,4 +71,4 @@ The hosted server covers core inbox, message, thread, search, draft, attachment,
 - A 401 with OAuth usually means the sign-in is incomplete or the session expired.
 - A 401 with API-key auth usually means `AGENTMAIL_API_KEY` was not available to the client process or the key was revoked.
 - Use the full `am_` key value and prefer the narrowest suitable organization, pod, or inbox scope.
-- The published local `agentmail-mcp` package may lag the hosted API. Use it only after verifying its installed SDK and toolkit versions against the required features.
+- For a stdio-only client, use the supported npm or PyPI `agentmail-mcp` compatibility bridge. Both discover tools dynamically from the hosted server.
