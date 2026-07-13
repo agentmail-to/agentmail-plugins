@@ -53,7 +53,7 @@ import { AgentMailToolkit } from "agentmail-toolkit/mcp";
 const tools = new AgentMailToolkit().getTools();
 ```
 
-Each tool provides a name, title, description, input schema, callback, and annotations for registration on your own MCP server. The Python package does not ship an MCP adapter.
+Each tool provides a name, title, description, input schema, output schema, callback, and complete annotations for registration on your own MCP server. On a successful call the MCP adapter returns `structuredContent` (validated against the output schema) alongside the JSON text block; on failure it returns an `isError` result. The Python package does not ship an MCP adapter.
 
 ### Existing client
 
@@ -126,6 +126,14 @@ class EmailAssistant(Agent):
 ```
 
 Subclass the LiveKit `Agent` and pass instructions and toolkit tools through `super().__init__`.
+
+## Results and errors
+
+Requires toolkit TypeScript >= 0.5.0 or Python >= 0.3.0.
+
+- Every tool declares an output schema. MCP tool calls return validated `structuredContent` plus a matching JSON text block on success; void operations (deletes) return a stable `{ success: true }` object.
+- A failed tool call is signaled through each framework's native error channel, not as a successful result. The Vercel AI SDK, LangChain, and clawdbot adapters (and the generic export) **throw** on failure — surfacing a distinct tool-error the model can tell apart from a normal result — and the MCP adapter returns `isError: true`. Do not treat a returned value as an error string; catch the thrown error or check `isError`.
+- Error messages are concise and bounded (the API's own reason, not a raw SDK dump).
 
 ## Safety
 
