@@ -1,6 +1,6 @@
 # AgentMail Plugin
 
-Official AgentMail plugin for Codex, Claude Code, and Cursor. It gives coding agents access to AgentMail inboxes, messages, threads, drafts, attachments, search, webhooks, and WebSockets.
+Official AgentMail plugin for Codex, Claude Code, Cursor, and any other third-party surfaces. It gives coding agents access to AgentMail inboxes, messages, threads, drafts, attachments, search, webhooks, and WebSockets.
 
 The repository keeps shared Agent Skills portable while using native manifests and authentication for each supported client. It also retains the vendor-neutral [Open Plugins](https://open-plugins.com) manifest.
 
