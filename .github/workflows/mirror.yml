@@ -9,7 +9,7 @@ concurrency:
   group: mirror-skills          # serializes racing merges; no cancel-in-progress
 
 permissions:
-  contents: read                # write to the mirror comes from the deploy key
+  contents: read                # write to the mirror comes from MIRROR_TOKEN
 
 jobs:
   sync:
@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: agentmail-to/agentmail-skills
-          ssh-key: ${{ secrets.MIRROR_DEPLOY_KEY }}
+          token: ${{ secrets.MIRROR_TOKEN }}    # fine-grained PAT, contents:write on agentmail-skills only (org disables deploy keys)
           path: mirror
       - name: Sync skills to mirror root
         run: |
