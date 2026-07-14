@@ -36,21 +36,7 @@ claude mcp add --transport http agentmail https://mcp.agentmail.to/mcp
 
 Complete the browser sign-in on first connection. Multi-organization OAuth sessions can use the server’s organization-selection tools.
 
-## Per-client configuration
-
-Add the same `type: http` server entry to the client's MCP config file:
-
-- Cursor: `.cursor/mcp.json`
-- VS Code: `.vscode/mcp.json`
-- Windsurf: its MCP config file
-- Claude Desktop: `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%/Claude/claude_desktop_config.json` (Windows)
-
-## Auth options
-
-- **OAuth** — browser-based sign-in, for clients that support remote MCP OAuth. Use the bare URL with no credentials.
-- **`x-api-key` header** — recommended for clients without OAuth support (see below).
-- **`Authorization: Bearer <am_...>` header** — an alternative header form some clients require.
-- **`apiKey` query param** — supported but not recommended; prefer a header so the key doesn't end up in logs or history.
+## Clients without OAuth
 
 For a Streamable HTTP client that cannot complete OAuth, export `AGENTMAIL_API_KEY` and send it as a header:
 
