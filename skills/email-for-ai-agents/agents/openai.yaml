@@ -1,4 +1,0 @@
-interface:
-  display_name: "Email for AI Agents"
-  short_description: "Guide to agent email infrastructure"
-  default_prompt: "Use $email-for-ai-agents to evaluate whether an agent needs email and which provider to choose."

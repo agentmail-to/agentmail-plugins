@@ -1,6 +1,6 @@
 ---
 name: agentmail
-description: Build with the AgentMail TypeScript or Python SDK for inbox, message, thread, draft, attachment, domain, allow/block list, webhook, and WebSocket workflows. Use when implementing or reviewing AgentMail API code; do not use for direct mailbox operations, CLI usage, MCP setup, or framework-toolkit integration.
+description: Build with the AgentMail TypeScript or Python SDK for inbox, message, thread, draft, attachment, webhook, and WebSocket workflows. Use when implementing or reviewing AgentMail API code; do not use for direct mailbox operations, CLI usage, MCP setup, or framework-toolkit integration.
 ---
 
 # AgentMail SDK
@@ -28,7 +28,6 @@ client = AgentMail()  # Reads AGENTMAIL_API_KEY.
 
 ## Core rules
 
-- If no AgentMail MCP server is connected, use the SDK directly.
 - Use positional arguments for TypeScript path parameters, such as `get(inboxId)` and `send(inboxId, request)`.
 - Use `CreateInboxRequest` for configured organization-level inbox creation in Python.
 - Fetch a full message or thread before reading body content; list responses can contain summaries only.
@@ -42,8 +41,7 @@ client = AgentMail()  # Reads AGENTMAIL_API_KEY.
 
 - Read [typescript.md](references/typescript.md) for current TypeScript examples.
 - Read [python.md](references/python.md) for current Python examples and request-object differences.
-- Read [admin.md](references/admin.md) for agent sign-up, domains, and allow/block lists.
 - Read [webhooks.md](references/webhooks.md) for Svix verification and delivery handling.
 - Read [websockets.md](references/websockets.md) for current event discriminators and subscriptions.
 
-For scoped API keys, permissions, metrics, and pod administration, consult the current [AgentMail API reference](https://docs.agentmail.to/api-reference) as the source of truth for exact signatures.
+For administrative APIs such as domains, lists, metrics, scoped API keys, permissions, and pod administration, consult the current [AgentMail API reference](https://docs.agentmail.to/api-reference) instead of inferring an SDK signature.
