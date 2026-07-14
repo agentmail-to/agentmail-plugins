@@ -135,6 +135,16 @@ Requires toolkit TypeScript >= 0.5.0 or Python >= 0.3.0.
 - A failed tool call is signaled through each framework's native error channel, not as a successful result. The Vercel AI SDK, LangChain, and clawdbot adapters (and the generic export) **throw** on failure — surfacing a distinct tool-error the model can tell apart from a normal result — and the MCP adapter returns `isError: true`. Do not treat a returned value as an error string; catch the thrown error or check `isError`.
 - Error messages are concise and bounded (the API's own reason, not a raw SDK dump).
 
+## Framework summary
+
+| Framework         | TypeScript Import                    | Python Import                                              |
+| ----------------- | ------------------------------------ | ---------------------------------------------------------- |
+| Vercel AI SDK     | `from 'agentmail-toolkit/ai-sdk'`    | -                                                            |
+| LangChain         | `from 'agentmail-toolkit/langchain'` | `from agentmail_toolkit.langchain import AgentMailToolkit`  |
+| Clawdbot          | `from 'agentmail-toolkit/clawdbot'`  | -                                                            |
+| OpenAI Agents SDK | -                                     | `from agentmail_toolkit.openai import AgentMailToolkit`    |
+| LiveKit Agents    | -                                     | `from agentmail_toolkit.livekit import AgentMailToolkit`   |
+
 ## Safety
 
 - Limit tools to the workflow’s needs.

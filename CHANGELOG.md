@@ -7,6 +7,15 @@ All notable changes to the AgentMail plugin are documented here.
 - Track AgentMail Toolkit TypeScript 0.5.0 and Python 0.3.0.
 - Document the toolkit's structured-output contract (every tool declares an output schema; MCP calls return validated `structuredContent`) and its framework-native error signaling (adapters throw / MCP returns `isError` on failure, instead of returning an error string). **Blocked on the 0.5.0 / 0.3.0 npm and PyPI publish — the compatibility CI gate stays red until those versions are the registry `latest`.**
 
+## 0.4.0 - 2026-07-14
+
+- Add `agent-email-patterns` and `email-for-ai-agents` skills, moved from the agentmail-skills repository.
+- Document admin APIs in the `agentmail` skill: agent sign-up, domain management (including the `feedback_enabled` field), and allow/block lists; add pagination, retry semantics, and raw MIME guidance.
+- Expand `agentmail-cli` with pods, webhooks, domains, forward, and HTML-send commands.
+- Add per-client configuration and auth options to `agentmail-mcp`.
+- Add a framework import table to `agentmail-toolkit`.
+- Consolidate `agentmail-sdk` (agentmail-skills repo) into `agentmail`; the agentmail-skills repository becomes a read-only mirror.
+
 ## 0.3.0 - 2026-07-10
 
 - Use the hosted AgentMail MCP server with OAuth for Claude, Codex, and Cursor.

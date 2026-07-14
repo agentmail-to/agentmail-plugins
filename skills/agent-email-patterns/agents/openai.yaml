@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agent Email Patterns"
+  short_description: "Architecture patterns for agent email"
+  default_prompt: "Use $agent-email-patterns to design agent email architecture and communication loops."

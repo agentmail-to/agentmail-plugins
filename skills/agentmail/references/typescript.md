@@ -29,6 +29,8 @@ const sent = await client.inboxes.messages.send(inbox.inboxId, {
   html: "<p>Plain-text body</p>",
 });
 
+// .list() returns metadata only (subject, from, labels, timestamps) — no
+// body. Fetch the full message with .get() to read .text / .html / .extractedText.
 const messages = await client.inboxes.messages.list(inbox.inboxId, { limit: 20 });
 const message = await client.inboxes.messages.get(inbox.inboxId, "msg_123");
 const body = message.extractedText ?? message.text ?? message.extractedHtml ?? message.html;
@@ -42,11 +44,41 @@ await client.inboxes.messages.forward(inbox.inboxId, message.messageId, {
   text: "For your review.",
 });
 
+const raw = await client.inboxes.messages.getRaw(inbox.inboxId, message.messageId);
+
 const threads = await client.inboxes.threads.list(inbox.inboxId, { limit: 20 });
 const thread = await client.inboxes.threads.get(inbox.inboxId, message.threadId);
 ```
 
-Follow `nextPageToken` when it is present. Use the `search` methods on inbox messages or threads for full-text queries.
+Use the `search` methods on inbox messages or threads for full-text queries. `getRaw` returns the raw MIME source of a message.
+
+## Pagination
+
+Pagination is per call — request the next page explicitly with `pageToken`.
+
+```typescript
+let response = await client.inboxes.messages.list(inbox.inboxId, { limit: 20 });
+while (response.nextPageToken) {
+  response = await client.inboxes.messages.list(inbox.inboxId, {
+    limit: 20,
+    pageToken: response.nextPageToken,
+  });
+}
+```
+
+## Errors and retries
+
+Both SDKs raise/throw on error responses and automatically retry 5xx, 408, 409, and 429 (default: 2 retries). On a 429, read the `Retry-After` header. Override retries client-wide with `maxRetries`, or per call with `requestOptions`.
+
+```typescript
+const client = new AgentMailClient({ apiKey: process.env.AGENTMAIL_API_KEY, maxRetries: 5 });
+
+await client.inboxes.messages.send(
+  inbox.inboxId,
+  { to: "user@example.com", subject: "Hi", text: "Hello" },
+  { maxRetries: 5 },
+);
+```
 
 ## Drafts and attachments
 

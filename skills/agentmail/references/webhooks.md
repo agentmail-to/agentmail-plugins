@@ -61,3 +61,31 @@ def receive_webhook():
 ```
 
 Core event names include `message.received`, `message.sent`, `message.delivered`, `message.bounced`, `message.complained`, `message.rejected`, and `domain.verified`. Spam, blocked, and unauthenticated inbound events use `message.received.*` variants and require the corresponding permissions.
+
+## Payload shape
+
+```json
+{
+  "type": "event",
+  "event_type": "message.received",
+  "event_id": "evt_123abc",
+  "message": {
+    "inbox_id": "inbox_456def",
+    "thread_id": "thd_789ghi",
+    "message_id": "msg_123abc",
+    "from": "Jane Doe <jane@example.com>",
+    "to": ["Agent <agent@agentmail.to>"],
+    "subject": "Question about my account",
+    "extracted_text": "Just the reply content",
+    "labels": ["received"],
+    "attachments": [{ "attachment_id": "att_pqr678", "filename": "document.pdf" }],
+    "created_at": "2025-10-27T10:00:00Z"
+  }
+}
+```
+
+Large message bodies may be omitted from the payload; fetch the full message when `text`/`html` is not present.
+
+## Delivery retries
+
+A delivery is considered failed if your endpoint returns a non-2xx status or times out. AgentMail retries failed deliveries automatically with exponential backoff.
