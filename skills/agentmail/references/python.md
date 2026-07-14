@@ -34,6 +34,9 @@ sent = client.inboxes.messages.send(
     html="<p>Plain-text body</p>",
 )
 
+# .list() returns MessageItem objects (metadata only: subject, from, labels,
+# timestamps). There is no body. Fetch the full message with .get() to read
+# .text / .html / .extracted_text.
 messages = client.inboxes.messages.list(inbox_id=inbox.inbox_id, limit=20)
 message = client.inboxes.messages.get(
     inbox_id=inbox.inbox_id,
@@ -54,6 +57,11 @@ client.inboxes.messages.forward(
     text="For your review.",
 )
 
+raw = client.inboxes.messages.get_raw(
+    inbox_id=inbox.inbox_id,
+    message_id=message.message_id,
+)
+
 threads = client.inboxes.threads.list(inbox_id=inbox.inbox_id, limit=20)
 thread = client.inboxes.threads.get(
     inbox_id=inbox.inbox_id,
@@ -61,7 +69,35 @@ thread = client.inboxes.threads.get(
 )
 ```
 
-Follow `next_page_token` when it is present. Use the `search` methods on inbox messages or threads for full-text queries.
+Use the `search` methods on inbox messages or threads for full-text queries. `get_raw` returns the raw MIME source of a message.
+
+## Pagination
+
+Pagination is per call — request the next page explicitly with `page_token`.
+
+```python
+response = client.inboxes.messages.list(inbox_id=inbox.inbox_id, limit=20)
+while response.next_page_token:
+    response = client.inboxes.messages.list(
+        inbox_id=inbox.inbox_id,
+        limit=20,
+        page_token=response.next_page_token,
+    )
+```
+
+## Errors and retries
+
+Both SDKs raise/throw on error responses and automatically retry 5xx, 408, 409, and 429 (default: 2 retries). On a 429, read the `Retry-After` header. The `AgentMail` constructor has no `max_retries` argument — override retries per call with `request_options`.
+
+```python
+client.inboxes.messages.send(
+    inbox_id=inbox.inbox_id,
+    to="user@example.com",
+    subject="Hi",
+    text="Hello",
+    request_options={"max_retries": 5},
+)
+```
 
 ## Drafts and attachments
 
