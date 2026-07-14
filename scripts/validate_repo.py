@@ -145,6 +145,11 @@ for markdown in ROOT.rglob("*.md"):
 stale_patterns = {
     '"AGENTMAIL_API_KEY": ""': "empty API-key override",
     'https://mcp.agentmail.to"': "hosted MCP URL missing /mcp",
+    "https://github.com/agentmail-to/agentmail-manufact-mcp": "retired hosted-source repository",
+    "https://github.com/agentmail-to/agentmail-smithery-mcp": "retired Smithery-source repository",
+    "@agentmail/mcp": "nonexistent npm package",
+    "https://agentmail.run.tools": "retired Smithery deployment",
+    "https://server.smithery.ai/agentmail": "retired Registry endpoint",
     "[TODO:": "unresolved skill placeholder",
 }
 

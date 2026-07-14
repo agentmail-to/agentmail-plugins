@@ -11,7 +11,7 @@
   },
   "hostedMcp": {
     "url": "https://mcp.agentmail.to/mcp",
-    "source": "https://github.com/agentmail-to/agentmail-manufact-mcp"
+    "source": "https://github.com/agentmail-to/agentmail-mcp"
   },
   "specifications": {
     "openapi": "https://docs.agentmail.to/openapi.json",
