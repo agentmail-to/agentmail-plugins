@@ -51,25 +51,22 @@ An attacker sends fake webhook payloads to your endpoint to trigger agent action
 
 ### Defense: verify webhook signatures
 
-```python
-import hmac, hashlib
+AgentMail signs webhooks with [Svix](https://docs.svix.com/receiving/verifying-payloads/how). Verify with the Svix library rather than hand-rolled HMAC — it checks the signature, rejects stale timestamps, and handles key rotation.
 
-def verify_signature(payload: bytes, signature, secret: str) -> bool:
-    # compare_digest raises TypeError on None, bytes, or any non-str value.
-    if not isinstance(signature, str) or not signature:
-        return False
-    expected = hmac.new(secret.encode(), payload, hashlib.sha256).hexdigest()
-    return hmac.compare_digest(expected, signature)
+```python
+from svix.webhooks import Webhook, WebhookVerificationError
 
 @app.route("/webhooks", methods=["POST"])
 def handle_webhook():
-    signature = request.headers.get("X-AgentMail-Signature")
-    if not verify_signature(request.data, signature, WEBHOOK_SECRET):
-        return "Invalid signature", 401
+    try:
+        event = Webhook(WEBHOOK_SECRET).verify(request.data, dict(request.headers))
+    except WebhookVerificationError:
+        return "", 400
     # Safe to process
+    return "", 204
 ```
 
-Always verify before processing. Never skip verification in production.
+Verify before parsing the body, not after — an unverified payload is attacker-controlled input. For the full webhook reference, see the `agentmail` skill's `references/webhooks.md`.
 
 ## Threat 3: credential leakage
 

@@ -109,24 +109,23 @@ Attackers send fake HTTP requests to your webhook endpoint, pretending to be Age
 
 ### Defense: always verify signatures
 
-```python
-import hmac, hashlib
+AgentMail signs webhooks with [Svix](https://docs.svix.com/receiving/verifying-payloads/how). Use the Svix library rather than hand-rolled HMAC — it verifies the signature, rejects stale timestamps, and handles key rotation.
 
-def verify_webhook(payload: bytes, signature, secret: str) -> bool:
-    # compare_digest raises TypeError on None, bytes, or any non-str value.
-    if not isinstance(signature, str) or not signature:
-        return False
-    expected = hmac.new(secret.encode(), payload, hashlib.sha256).hexdigest()
-    return hmac.compare_digest(expected, signature)
+```python
+from svix.webhooks import Webhook, WebhookVerificationError
+
+try:
+    event = Webhook(WEBHOOK_SECRET).verify(request.data, dict(request.headers))
+except WebhookVerificationError:
+    return "", 400
 ```
 
-Never process webhook payloads without verification. Never skip verification "for testing" in production.
+Verify before parsing the body — an unverified payload is attacker-controlled input.
 
 ### Additional hardening
 
 - Use HTTPS-only webhook endpoints
-- Restrict webhook source IPs if your provider publishes them
-- Implement idempotency (deduplicate by event ID) to prevent replay attacks
+- Deduplicate by `svix-id` to prevent replay; retries reuse the same identifier
 - Set up monitoring for unusual webhook volume
 
 ## Risk 4: data leakage in outbound email
