@@ -1,4 +1,6 @@
 interface:
-  display_name: "AgentMail MCP"
+  display_name: "AgentMail MCP Setup"
   short_description: "Configure the AgentMail MCP server"
-  default_prompt: "Use $agentmail-mcp to configure or troubleshoot AgentMail MCP."
+  default_prompt: "Use $agentmail-mcp to configure or troubleshoot the AgentMail MCP connection."
+policy:
+  allow_implicit_invocation: true

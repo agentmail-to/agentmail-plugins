@@ -1,7 +1,7 @@
 interface:
   display_name: "Manage Inboxes"
   short_description: "Create and manage AgentMail inboxes"
-  default_prompt: "Use $manage-inboxes to create or safely manage AgentMail inboxes."
+  default_prompt: "Use $manage-inboxes to create, update, or delete AgentMail inboxes."
 dependencies:
   tools:
     - type: "mcp"

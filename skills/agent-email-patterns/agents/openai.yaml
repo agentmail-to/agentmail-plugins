@@ -1,0 +1,6 @@
+interface:
+  display_name: "Agent Email Patterns"
+  short_description: "Design agent email architecture safely"
+  default_prompt: "Use $agent-email-patterns to design the agent email architecture and threat model."
+policy:
+  allow_implicit_invocation: true

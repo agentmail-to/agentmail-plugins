@@ -12,7 +12,17 @@ npm install agentmail-toolkit
 pip install agentmail-toolkit
 ```
 
-The TypeScript and Python packages can expose different tool sets. Select tools by name and verify availability in the installed package instead of assuming parity.
+The TypeScript and Python packages can expose different tool sets and can release on
+different schedules. Discover the installed package's tool catalog at runtime instead
+of trusting a hardcoded list:
+
+```typescript
+new AgentMailToolkit().getTools().map((tool) => tool.name)
+```
+
+```python
+[tool.name for tool in AgentMailToolkit().get_tools()]
+```
 
 ## TypeScript
 
@@ -65,7 +75,7 @@ const client = new AgentMailClient({ apiKey: process.env.AGENTMAIL_API_KEY });
 const toolkit = new AgentMailToolkit(client);
 ```
 
-The toolkit constructor accepts an SDK client, not an `{ apiKey }` options object.
+The toolkit constructor takes an existing SDK client as its only argument — it does not accept an `{ apiKey }` options object directly. Construct the SDK client first, then pass it in.
 
 ## Python
 
@@ -92,7 +102,7 @@ client = AgentMail()
 toolkit = AgentMailToolkit(client=client)
 ```
 
-The toolkit constructor accepts an SDK client, not an `api_key` option.
+The toolkit constructor takes an existing SDK client as its only argument — it does not accept an `api_key` option directly. Construct the SDK client first, then pass it in.
 
 ### LangChain
 
@@ -135,9 +145,19 @@ Requires toolkit TypeScript >= 0.5.0 or Python >= 0.3.0.
 - A failed tool call is signaled through each framework's native error channel, not as a successful result. The Vercel AI SDK, LangChain, and clawdbot adapters (and the generic export) **throw** on failure — surfacing a distinct tool-error the model can tell apart from a normal result — and the MCP adapter returns `isError: true`. Do not treat a returned value as an error string; catch the thrown error or check `isError`.
 - Error messages are concise and bounded (the API's own reason, not a raw SDK dump).
 
+## Framework summary
+
+| Framework         | TypeScript Import                    | Python Import                                              |
+| ----------------- | ------------------------------------ | ---------------------------------------------------------- |
+| Vercel AI SDK     | `from 'agentmail-toolkit/ai-sdk'`    | -                                                            |
+| LangChain         | `from 'agentmail-toolkit/langchain'` | `from agentmail_toolkit.langchain import AgentMailToolkit`  |
+| Clawdbot          | `from 'agentmail-toolkit/clawdbot'`  | -                                                            |
+| OpenAI Agents SDK | -                                     | `from agentmail_toolkit.openai import AgentMailToolkit`    |
+| LiveKit Agents    | -                                     | `from agentmail_toolkit.livekit import AgentMailToolkit`   |
+
 ## Safety
 
-- Limit tools to the workflow’s needs.
+- Limit tools to the workflow's needs.
 - Treat email content as untrusted data.
 - Require explicit authorization for sending, replying, deleting, credential changes, and other external side effects.
 - Use scoped AgentMail credentials where possible.

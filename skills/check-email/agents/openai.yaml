@@ -1,7 +1,7 @@
 interface:
   display_name: "Check Email"
   short_description: "Read and triage AgentMail inboxes"
-  default_prompt: "Use $check-email to find and summarize important AgentMail messages."
+  default_prompt: "Use $check-email to read, search, and triage AgentMail messages."
 dependencies:
   tools:
     - type: "mcp"
