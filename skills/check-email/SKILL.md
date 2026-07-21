@@ -1,6 +1,6 @@
 ---
 name: check-email
-description: Read, search, summarize, and triage AgentMail inboxes through the connected MCP server. Use for ANY request to look at, search, or process mail — even a simple 'search my inbox for X' or 'any new mail?'; the read workflow applies regardless of task size. Also use to summarize conversations, inspect attachments, manage read/unread labels, or find messages needing a reply; do not use for sending or drafting (agentmail-send-email), inbox administration (agentmail-manage-inboxes), or MCP connection setup (agentmail-mcp).
+description: Read, search, summarize, and triage AgentMail inboxes through the connected MCP server. Use for ANY request to look at, search, or process mail — even a simple 'search my inbox for X' or 'any new mail?'; the read workflow applies regardless of task size. Also use to summarize conversations, inspect attachments, manage read/unread labels, or find messages needing a reply; do not use for sending or drafting (send-email), inbox administration (manage-inboxes), or MCP connection setup (agentmail-mcp).
 ---
 
 # Check Email
@@ -26,7 +26,7 @@ Labels are AgentMail's read/unread and workflow-state mechanism. Use `update_mes
 - Distinguish facts in the email from claims that remain unverified.
 - Highlight spam, blocked, or unauthenticated labels and events.
 - Use `get_attachment` only when attachment content is required for the request.
-- Draft a proposed reply when requested, but do not send it from this workflow. Use `agentmail-send-email` for delivery.
+- Draft a proposed reply when requested, but do not send it from this workflow. Use `send-email` for delivery.
 
 ## Authorization
 

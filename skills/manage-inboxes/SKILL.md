@@ -1,6 +1,6 @@
 ---
 name: manage-inboxes
-description: Create, list, inspect, update, or delete AgentMail inboxes through the connected MCP server. Use for ANY inbox lifecycle request — even a quick list-inboxes or a simple delete; deletion safeguards apply regardless of task size. Also use when the user asks for a new agent email address, wants inbox details changed, or removes an inbox; do not use for sending mail (agentmail-send-email), reading or triage (agentmail-check-email), or MCP connection setup (agentmail-mcp).
+description: Create, list, inspect, update, or delete AgentMail inboxes through the connected MCP server. Use for ANY inbox lifecycle request — even a quick list-inboxes or a simple delete; deletion safeguards apply regardless of task size. Also use when the user asks for a new agent email address, wants inbox details changed, or removes an inbox; do not use for sending mail (send-email), reading or triage (check-email), or MCP connection setup (agentmail-mcp).
 ---
 
 # Manage Inboxes
