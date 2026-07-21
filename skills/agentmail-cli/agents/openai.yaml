@@ -1,4 +1,6 @@
 interface:
   display_name: "AgentMail CLI"
-  short_description: "Run AgentMail from the command line"
-  default_prompt: "Use $agentmail-cli to perform this AgentMail workflow from the shell."
+  short_description: "Operate AgentMail from a shell"
+  default_prompt: "Use $agentmail-cli to run AgentMail operations from the terminal."
+policy:
+  allow_implicit_invocation: true
