@@ -1,0 +1,64 @@
+name: Validate package compatibility
+
+on:
+  pull_request:
+    paths:
+      - compatibility.json
+      - tests/**
+      - .github/workflows/compatibility.yml
+  push:
+    branches: [main]
+    paths:
+      - compatibility.json
+      - tests/**
+      - .github/workflows/compatibility.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compatibility:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate Python SDK signatures
+        run: |
+          version="$(python3 -c 'import json; print(json.load(open("compatibility.json"))["agentmail"]["python"])')"
+          python3 -m pip install "agentmail==$version"
+          python3 tests/test_sdk_signatures.py
+
+      - name: Run Python webhook verification fixtures
+        run: |
+          python3 -m pip install svix
+          python3 tests/test_webhook_verification.py
+
+      - name: Type-check TypeScript compatibility fixtures
+        run: |
+          sdk="$(node -p "require('./compatibility.json').agentmail.typescript")"
+          toolkit="$(node -p "require('./compatibility.json').toolkit.typescript")"
+          tmp="$(mktemp -d)"
+          cp tests/sdk_typescript.ts tests/webhook_typescript.ts tests/webhook_verification.ts tests/package.json "$tmp/"
+          cd "$tmp"
+          npm install --no-save "agentmail@$sdk" "agentmail-toolkit@$toolkit" "ai@6" "langchain@1" "svix" "express" "@types/express" "typescript@5.9.3" "tsx" "@types/node@22"
+          ./node_modules/.bin/tsc --noEmit --strict --skipLibCheck --target ES2022 --module NodeNext --moduleResolution NodeNext sdk_typescript.ts webhook_typescript.ts webhook_verification.ts
+          ./node_modules/.bin/tsx webhook_verification.ts
+
+      - name: Validate CLI command names
+        run: |
+          version="$(node -p "require('./compatibility.json').cli")"
+          npx -y "agentmail-cli@$version" inboxes --help | tee /tmp/inboxes-help
+          npx -y "agentmail-cli@$version" inboxes:messages --help | tee /tmp/messages-help
+          grep -q "get" /tmp/inboxes-help
+          grep -q "get" /tmp/messages-help
+          ! grep -q "retrieve" /tmp/inboxes-help
+          ! grep -q "retrieve" /tmp/messages-help

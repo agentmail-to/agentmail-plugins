@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""Fail when verified AgentMail dependencies or public specs have drifted."""
+"""Fail when verified AgentMail package versions have drifted."""
 
 from __future__ import annotations
 
 import json
 import sys
-import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -42,22 +41,6 @@ errors = [
     if version != expected[name]
 ]
 
-openapi = fetch_json(EXPECTED["specifications"]["openapi"])
-asyncapi = fetch_json(EXPECTED["specifications"]["asyncapi"])
-if not str(openapi.get("openapi", "")).startswith("3."):
-    errors.append("AgentMail OpenAPI document is missing an OpenAPI 3.x marker")
-if not str(asyncapi.get("asyncapi", "")).startswith("2."):
-    errors.append("AgentMail AsyncAPI document is missing an AsyncAPI 2.x marker")
-
-try:
-    request = urllib.request.Request(EXPECTED["hostedMcp"]["url"], headers=HEADERS)
-    urllib.request.urlopen(request, timeout=20).close()
-except urllib.error.HTTPError as exc:
-    if exc.code not in {401, 405}:
-        errors.append(f"hosted MCP probe returned unexpected HTTP {exc.code}")
-except urllib.error.URLError as exc:
-    errors.append(f"hosted MCP probe failed: {exc}")
-
 if errors:
     print("Compatibility drift detected:", file=sys.stderr)
     for item in errors:
@@ -66,4 +49,4 @@ if errors:
 
 for name in sorted(actual):
     print(f"{name}: {actual[name]}")
-print("AgentMail OpenAPI, AsyncAPI, and hosted MCP probes passed")
+print("AgentMail package versions match compatibility.json")

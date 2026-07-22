@@ -1,0 +1,57 @@
+name: Validate marketplaces
+
+on:
+  pull_request:
+    paths:
+      - .agents/**
+      - .claude-plugin/**
+      - .codex-plugin/**
+      - .cursor-plugin/**
+      - .plugin/**
+      - .mcp.json
+      - assets/**
+      - skills/**
+      - .github/workflows/marketplace.yml
+  push:
+    branches: [main]
+    paths:
+      - .agents/**
+      - .claude-plugin/**
+      - .codex-plugin/**
+      - .cursor-plugin/**
+      - .plugin/**
+      - .mcp.json
+      - assets/**
+      - skills/**
+      - .github/workflows/marketplace.yml
+  schedule:
+    - cron: "37 16 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  marketplace:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate Codex marketplace installation
+        run: |
+          npm install --global @openai/codex
+          codex_home="$(mktemp -d)"
+          CODEX_HOME="$codex_home" codex plugin marketplace add . --json
+          CODEX_HOME="$codex_home" codex plugin list --available --json | tee /tmp/codex-plugins.json
+          grep -q '"pluginId": "agentmail@agentmail"' /tmp/codex-plugins.json
+          CODEX_HOME="$codex_home" codex plugin add agentmail@agentmail --json
+
+      - name: Validate Claude plugin
+        run: |
+          npm install --global @anthropic-ai/claude-code
+          claude plugin validate . --strict
+          claude plugin validate .claude-plugin/plugin.json --strict
