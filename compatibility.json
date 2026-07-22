@@ -8,13 +8,5 @@
   "toolkit": {
     "typescript": "0.5.1",
     "python": "0.3.0"
-  },
-  "hostedMcp": {
-    "url": "https://mcp.agentmail.to/mcp",
-    "source": "https://github.com/agentmail-to/agentmail-mcp"
-  },
-  "specifications": {
-    "openapi": "https://docs.agentmail.to/openapi.json",
-    "asyncapi": "https://docs.agentmail.to/asyncapi.json"
   }
 }

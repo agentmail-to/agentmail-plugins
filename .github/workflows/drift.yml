@@ -1,6 +1,17 @@
 name: Check upstream drift
 
 on:
+  pull_request:
+    paths:
+      - compatibility.json
+      - scripts/check_compatibility.py
+      - .github/workflows/drift.yml
+  push:
+    branches: [main]
+    paths:
+      - compatibility.json
+      - scripts/check_compatibility.py
+      - .github/workflows/drift.yml
   schedule:
     - cron: "17 16 * * 1"
   workflow_dispatch:
