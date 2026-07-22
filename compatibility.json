@@ -1,12 +1,12 @@
 {
-  "verifiedAt": "2026-07-12",
+  "verifiedAt": "2026-07-21",
   "agentmail": {
-    "typescript": "0.5.14",
-    "python": "0.5.6"
+    "typescript": "0.5.17",
+    "python": "0.5.8"
   },
-  "cli": "0.7.12",
+  "cli": "0.7.14",
   "toolkit": {
-    "typescript": "0.5.0",
+    "typescript": "0.5.1",
     "python": "0.3.0"
   },
   "hostedMcp": {
