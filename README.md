@@ -40,7 +40,15 @@ Start a new session and complete the AgentMail OAuth flow on first use. Plugin s
 
 ### Cursor
 
-After the plugin is published to [Cursor Marketplace](https://cursor.com/marketplace), install it with `/add-plugin agentmail`. To test this repository directly, clone it and symlink it into Cursor's local plugin directory:
+Install from the [Cursor Marketplace](https://cursor.com/marketplace/agentmail):
+
+```text
+/add-plugin agentmail
+```
+
+Complete the AgentMail OAuth browser sign-in when the MCP server first connects.
+
+To test this repository directly instead, clone it and symlink it into Cursor's local plugin directory:
 
 ```bash
 git clone https://github.com/agentmail-to/agentmail-plugins.git
@@ -48,7 +56,7 @@ mkdir -p ~/.cursor/plugins/local
 ln -s "$(pwd)/agentmail-plugins" ~/.cursor/plugins/local/agentmail
 ```
 
-Reload Cursor after creating the link, then complete the AgentMail OAuth browser sign-in when the MCP server first connects.
+Reload Cursor after creating the link.
 
 ## Authentication
 
