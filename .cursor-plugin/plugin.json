@@ -1,7 +1,7 @@
 {
   "name": "agentmail",
   "version": "0.3.0",
-  "description": "Email inboxes for coding agents. Create inboxes, send and receive emails, manage threads, and automate email workflows.",
+  "description": "Email inboxes for agents. Create inboxes, send and receive emails, manage threads, and automate email workflows.",
   "author": {
     "name": "AgentMail",
     "email": "support@agentmail.cc"
