@@ -1,7 +1,7 @@
 {
   "name": "agentmail",
-  "version": "0.3.0",
-  "description": "Email inboxes for agents. Create inboxes, send and receive emails, manage threads, and automate email workflows.",
+  "version": "0.4.0",
+  "description": "Email inboxes for agents. Create inboxes, send and receive emails, manage threads, automate email workflows, and sign inboxes in to providers with AgentID.",
   "author": {
     "name": "AgentMail",
     "email": "support@agentmail.cc"
@@ -9,7 +9,7 @@
   "homepage": "https://docs.agentmail.to",
   "repository": "https://github.com/agentmail-to/agentmail-plugins",
   "license": "MIT",
-  "keywords": ["email", "inbox", "mcp", "ai-agent", "email-api"],
+  "keywords": ["email", "inbox", "mcp", "ai-agent", "email-api", "agentid"],
   "logo": "./assets/logo.svg",
   "skills": "./skills/",
   "mcpServers": "./.mcp.json"

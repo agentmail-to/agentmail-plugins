@@ -1,6 +1,6 @@
 ---
 name: agentmail-mcp
-description: Configure or troubleshoot the hosted AgentMail MCP server for Codex, Claude Code, Cursor, or another Streamable HTTP MCP client. Use for installation, OAuth, API-key headers, connection failures, or MCP tool discovery. Do not use when the connection already works and the user just wants to send, check, or manage mail — use the sibling action skills for that.
+description: Configure or troubleshoot the hosted AgentMail MCP server for Codex, Claude Code, Cursor, Claude.ai, ChatGPT, or another Streamable HTTP MCP client. Use for installation, OAuth, API-key headers, connection failures, or MCP tool discovery. Do not use when the connection already works and the user just wants to send, check, or manage mail — use the sibling action skills for that.
 ---
 
 # AgentMail MCP
@@ -35,6 +35,15 @@ claude mcp add --transport http agentmail https://mcp.agentmail.to/mcp
 ```
 
 Complete the browser sign-in on first connection. Multi-organization OAuth sessions can use the server's organization-selection tools.
+
+## Claude.ai, Claude Desktop, and ChatGPT connectors
+
+These apps add the server as a connector and complete OAuth in the browser. No API key is needed.
+
+- **Claude.ai and Claude Desktop:** Settings → Connectors → Add custom connector. Name it `AgentMail`, set the URL to `https://mcp.agentmail.to/mcp`, then click Connect and sign in at `console.agentmail.to`.
+- **ChatGPT:** Settings → Apps & Connectors → Advanced settings, turn on Developer mode, then Create. Set the URL to `https://mcp.agentmail.to/mcp`, choose OAuth, and sign in at `console.agentmail.to`. Enable the connector in a chat from the tools menu.
+
+Connectors added on Claude.ai do not sync to Claude Code; add it there separately.
 
 ## Per-client configuration
 
@@ -74,6 +83,12 @@ Avoid query-string credentials when header authentication is available.
 
 MCP clients get the tool catalog and schemas live from the hosted runtime; do not rely on a copied tool count. The same generated contract is published at `https://github.com/agentmail-to/agentmail-mcp/blob/main/mcp-manifest.json` — treat the hosted runtime plus that manifest as the authoritative catalog. OAuth sessions can surface extra organization-selection tools beyond the base set.
 
+The catalog covers more than mail. Point users at these groups when they ask what the connector can do:
+
+- **Inboxes, threads, messages, drafts, attachments, and allow/block lists** — the mail workflows in the sibling action skills.
+- **AgentID providers and accounts** — `list_providers`, `search_providers`, `get_provider`, `connect_provider`, and `list_accounts` sign an inbox in to third-party services and show where each inbox holds an account. Use the `agentmail-agentid` skill for that workflow.
+- **Agent sign-up** — `agent_attach_human` and `agent_verify` lift an unverified agent organization's limits.
+
 ## Stdio Compatibility
 
 For a stdio-only client, use the supported npm or PyPI `agentmail-mcp` package. Both are thin stdio bridges to the same hosted runtime: they discover tools dynamically and carry no separate AgentMail tool logic of their own.
@@ -82,7 +97,7 @@ For a stdio-only client, use the supported npm or PyPI `agentmail-mcp` package. 
 
 1. Restart the client or open a new session after installing the plugin.
 2. Inspect MCP status in the client and complete authentication.
-3. Call `list_inboxes` as a read-only smoke test.
+3. Call `list_inboxes` as a read-only smoke test. Call `list_providers` to confirm the AgentID tools are exposed.
 4. Confirm that read, write, and destructive tool annotations produce the expected approval behavior.
 
 ## Troubleshoot

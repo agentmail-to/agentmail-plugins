@@ -1,0 +1,13 @@
+interface:
+  display_name: "AgentID Sign-In"
+  short_description: "Connect inboxes to providers"
+  default_prompt: "Use $agentmail-agentid to find a provider, sign an inbox in, and list its accounts."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "agentmail"
+      description: "AgentMail hosted MCP server"
+      transport: "streamable_http"
+      url: "https://mcp.agentmail.to/mcp"
+policy:
+  allow_implicit_invocation: true

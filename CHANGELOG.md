@@ -2,10 +2,14 @@
 
 All notable changes to the AgentMail plugin are documented here.
 
-## Unreleased
+## 0.4.0 - 2026-09-29
 
+- Add the `agentmail-agentid` skill: find providers, sign an inbox in with AgentID through `connect_provider`, and list provider accounts.
+- Describe Claude.ai and ChatGPT connector setup and the full hosted tool catalog in `agentmail-mcp`.
+- `check-email` reads single messages with `get_message`.
+- Mention AgentID in every plugin manifest and in the Codex default prompts.
 - Track AgentMail Toolkit TypeScript 0.5.0 and Python 0.3.0.
-- Document the toolkit's structured-output contract (every tool declares an output schema; MCP calls return validated `structuredContent`) and its framework-native error signaling (adapters throw / MCP returns `isError` on failure, instead of returning an error string). **Blocked on the 0.5.0 / 0.3.0 npm and PyPI publish — the compatibility CI gate stays red until those versions are the registry `latest`.**
+- Document the toolkit's structured-output contract (every tool declares an output schema; MCP calls return validated `structuredContent`) and its framework-native error signaling (adapters throw / MCP returns `isError` on failure, instead of returning an error string).
 
 ## 0.3.0 - 2026-07-10
 
