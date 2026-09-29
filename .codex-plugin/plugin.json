@@ -1,7 +1,7 @@
 {
   "name": "agentmail",
-  "version": "0.3.0",
-  "description": "AI-native email infrastructure for coding agents. Create inboxes, send and receive emails, manage threads, and automate email workflows.",
+  "version": "0.4.0",
+  "description": "Email inboxes for agents. Create inboxes, send and receive emails, automate email workflows, and create accounts with AgentID.",
   "author": {
     "name": "AgentMail",
     "email": "support@agentmail.cc",
@@ -10,13 +10,13 @@
   "homepage": "https://docs.agentmail.to",
   "repository": "https://github.com/agentmail-to/agentmail-plugins",
   "license": "MIT",
-  "keywords": ["email", "inbox", "mcp", "ai-agent", "email-api"],
+  "keywords": ["email", "inbox", "mcp", "ai-agent", "email-api", "agentid"],
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "AgentMail",
     "shortDescription": "Email infrastructure for AI agents",
-    "longDescription": "Give your coding agent its own email inboxes. Create addresses on the fly, send and receive messages, manage threads, handle attachments, and automate email workflows, all through natural language.",
+    "longDescription": "Give your coding agent its own email inboxes. Create addresses on the fly, send and receive messages, manage threads, handle attachments, and automate email workflows, all through natural language. With AgentID, create accounts for your agent at services like Firecrawl or Turso using its inbox, and see where it already has accounts.",
     "developerName": "AgentMail",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
@@ -26,7 +26,7 @@
     "defaultPrompt": [
       "Create a new project inbox and draft a welcome email.",
       "Check my AgentMail inbox for new messages and summarize unread threads.",
-      "Prepare a reply to the latest email in my inbox."
+      "Create an account at Firecrawl for my agent with AgentID."
     ],
     "brandColor": "#6366F1",
     "composerIcon": "./assets/logo.svg",

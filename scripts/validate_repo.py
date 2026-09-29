@@ -124,7 +124,7 @@ for skill_dir in skill_dirs:
     openai = openai_file.read_text(encoding="utf-8")
     if f"${skill_dir.name}" not in openai:
         error(f"{skill_dir.name}: default_prompt must mention ${skill_dir.name}")
-    if skill_dir.name in {"send-email", "check-email", "manage-inboxes"}:
+    if skill_dir.name in {"send-email", "check-email", "manage-inboxes", "agentid"}:
         if "https://mcp.agentmail.to/mcp" not in openai:
             error(f"{skill_dir.name}: missing hosted MCP dependency")
     elif "dependencies:" in openai:

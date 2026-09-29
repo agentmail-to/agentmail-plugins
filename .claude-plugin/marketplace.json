@@ -9,7 +9,7 @@
     {
       "name": "agentmail",
       "source": "./",
-      "description": "AI-native email infrastructure for coding agents. Create inboxes, send and receive emails, manage threads, and automate email workflows.",
+      "description": "Email inboxes for agents. Create inboxes, send and receive emails, automate email workflows, and create accounts with AgentID.",
       "category": "productivity"
     }
   ]
