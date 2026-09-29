@@ -41,7 +41,7 @@ Complete the browser sign-in on first connection. Multi-organization OAuth sessi
 These apps add the server as a connector and complete OAuth in the browser. No API key is needed.
 
 - **Claude.ai and Claude Desktop:** Settings → Connectors → Add custom connector. Name it `AgentMail`, set the URL to `https://mcp.agentmail.to/mcp`, then click Connect and sign in at `console.agentmail.to`.
-- **ChatGPT:** Settings → Apps & Connectors → Advanced settings, turn on Developer mode, then Create. Set the URL to `https://mcp.agentmail.to/mcp`, choose OAuth, and sign in at `console.agentmail.to`. Enable the connector in a chat from the tools menu.
+- **ChatGPT:** turn on Settings → Security and login → Developer mode (on a workspace plan, an admin must allow it first). Then open ChatGPT Plugins, click +, set the URL to `https://mcp.agentmail.to/mcp`, choose OAuth, and sign in at `console.agentmail.to`. In a chat, pick AgentMail from the + menu under Developer mode.
 
 Connectors added on Claude.ai do not sync to Claude Code; add it there separately.
 
