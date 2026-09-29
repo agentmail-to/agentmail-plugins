@@ -78,6 +78,8 @@ Try it in any client once the MCP server is connected:
 
 Invoke the skill explicitly with `$agentmail-agentid` in Codex or `/agentmail:agentmail-agentid` in Claude Code. In Cursor, ask in plain language; the agent picks the skill up from its description.
 
+List and search show only the curated catalog. A registered provider that is not listed still works with `get_provider` and `connect_provider` when you have its ID.
+
 `connect_provider` returns a single-use sign-in URL that expires within minutes. Open it in the browser that should hold the sign-in, then confirm with `list_accounts`. The call needs the `provider_connect` permission on the credential. In Claude.ai and ChatGPT, the same tools are available through the AgentMail connector; see [Hosted MCP setup](https://docs.agentmail.to/integrations/mcp).
 
 ## Authentication

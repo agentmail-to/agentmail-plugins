@@ -11,7 +11,7 @@ description: Sign an AgentMail inbox in to third-party providers with AgentID, a
 | --- | --- |
 | `list_providers` | Browse the marketplace, most popular first. Paginated. |
 | `search_providers` | Find a provider by name prefix. Prefer specific names. |
-| `get_provider` | Read one provider by ID, including terms and privacy links. |
+| `get_provider` | Read one provider by ID, including terms and privacy links. Works for any registered provider, listed or not. |
 | `list_accounts` | See which inboxes are signed in where. Pass `providerId` to narrow to one provider. |
 | `connect_provider` | Start signing an inbox in to a provider. Returns a single-use sign-in URL. |
 
@@ -19,13 +19,14 @@ description: Sign an AgentMail inbox in to third-party providers with AgentID, a
 
 1. Use `search_providers` with the name the user gave. Fall back to `list_providers` and page through when the name is short, misspelled, or missing.
 2. When several providers match, show name, description, and ID, and ask which one. Never pick between look-alike names on your own.
-3. Before connecting, show the provider's terms and privacy links from `get_provider` when the user has not seen them.
+3. If the user gives you a provider ID, use it directly with `get_provider` and `connect_provider`. List and search show only the curated catalog; a registered provider that is not listed there still resolves and connects by ID.
+4. Before connecting, show the provider's terms and privacy links from `get_provider` when the user has not seen them. An unlisted provider returns only its ID and name, with no `updatedAt`; say that it is not a reviewed catalog entry.
 
 ## Check accounts
 
 - Use `list_accounts` for every provider, or pass `providerId` for one provider.
 - Pages can return fewer items than the limit, even zero, while `nextPageToken` is present. Keep paging until it is absent before saying an inbox is not signed in somewhere. Keep `providerId` the same across those pages.
-- Report inbox, provider name, first and last sign-in, and sign-in count. An account with no `providerName` is at a provider outside the curated catalog; `get_provider` resolves its name when your organization holds an account there.
+- Report inbox, provider name, first and last sign-in, and sign-in count. An account with no `providerName` is at a provider outside the curated catalog; `get_provider` resolves its name.
 
 ## Connect an inbox
 
@@ -45,7 +46,7 @@ Rules for the sign-in URL:
 ## Errors
 
 - A permission error means the credential lacks `provider_connect`. The user can enable it on the API key in the AgentMail console; do not look for another key.
-- A 404 from `get_provider` means the provider is outside the catalog and your organization holds no account there.
+- A 404 from `get_provider` or `connect_provider` means no provider is registered under that ID. Check the ID with the user; do not guess another.
 - To stop an inbox from signing in to a provider again, or to revoke a sign-in key, point the user to the AgentID sign-in guide: https://docs.agentmail.to/agentid-sign-in. The MCP server has no tool for either.
 
 ## Authorization
