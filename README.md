@@ -9,7 +9,7 @@ The repository keeps shared Agent Skills portable while using native manifests a
 - `send-email` — draft, send, reply, and forward safely
 - `check-email` — search, read, summarize, and triage inboxes
 - `manage-inboxes` — create, inspect, update, and delete inboxes
-- `agentmail-agentid` — create accounts for your agent at providers like Firecrawl with AgentID, and list where it has accounts
+- `agentid` — create accounts for your agent at providers like Firecrawl with AgentID, and list where it has accounts
 - `agentmail` — TypeScript and Python SDK implementation
 - `agentmail-mcp` — hosted MCP setup and troubleshooting
 - `agentmail-cli` — command-line workflows
@@ -70,7 +70,7 @@ Ask in plain language once the MCP server is connected:
 - "Log my agent back in to Turso."
 - "Which services is support-bot@agentmail.to signed up for?"
 
-The `agentmail-agentid` skill carries the whole job. It finds the provider, picks the inbox that will own the account (creating one if needed), and checks for an existing account and the provider's sign-up cap. Then it hands you a single-use sign-in link and confirms the account exists. Finally it helps you get what you came for, usually an API key stored in your secret store. Invoke it explicitly with `$agentmail-agentid` in Codex or `/agentmail:agentmail-agentid` in Claude Code; in Cursor, just ask.
+The `agentid` skill carries the whole job. It finds the provider, picks the inbox that will own the account (creating one if needed), and checks for an existing account and the provider's sign-up cap. Then it hands you a single-use sign-in link and confirms the account exists. Finally it helps you get what you came for, usually an API key stored in your secret store. Invoke it explicitly with `$agentid` in Codex or `/agentmail:agentid` in Claude Code; in Cursor, just ask.
 
 | Tool | What it does |
 | --- | --- |

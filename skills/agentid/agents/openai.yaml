@@ -1,7 +1,7 @@
 interface:
   display_name: "AgentID Accounts"
   short_description: "Create accounts at providers for your agent"
-  default_prompt: "Use $agentmail-agentid to create an account for my agent at a provider, such as Firecrawl."
+  default_prompt: "Use $agentid to create an account for my agent at a provider, such as Firecrawl."
 dependencies:
   tools:
     - type: "mcp"

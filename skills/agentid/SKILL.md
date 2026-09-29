@@ -1,5 +1,5 @@
 ---
-name: agentmail-agentid
+name: agentid
 description: Create accounts for an agent at third-party services with AgentID, using an AgentMail inbox as the agent's identity, and see where each inbox already has an account. Use for ANY request like "create an account at Firecrawl", "sign my agent up for Turso", "get my agent a web search API", "log my agent back in to Firecrawl", "which services is this inbox signed up for?", or browsing the AgentID provider marketplace. Do not use for sending or reading mail (send-email, check-email), inbox lifecycle on its own (manage-inboxes), or MCP connection setup (agentmail-mcp).
 ---
 
@@ -21,7 +21,7 @@ The goal is almost never the sign-in itself. It is a working account the agent c
 
 ## Create an account
 
-1. **Find the provider.** Call `search_providers` with the name. One match: use it. Several: show name, description, and ID, and ask. Never pick between look-alike names yourself. No match and no ID: see [Not on AgentID](#not-on-agentid). If the user gave a provider ID, skip search and call `get_provider`; list and search show only the curated catalog, but any registered provider resolves and connects by ID.
+1. **Find the provider.** Call `search_providers` with the name. One match: use it. Several: show name, description, and ID, and ask. Never pick between look-alike names yourself. No match and no ID: see [Not on AgentID](#not-on-agentid). If the user gave a provider ID, skip search and call `get_provider`; list and search show only the curated catalog, but any registered provider resolves by ID and can be connected once it has a sign-in entry point.
 2. **Pick the inbox that will own the account.** The inbox is the agent's identity at the provider.
    - The user named one: use it.
    - The organization has one inbox (`list_inboxes`): use it and say which.
@@ -29,8 +29,9 @@ The goal is almost never the sign-in itself. It is a working account the agent c
    - None: offer to create one for the agent with `create_inbox`, then continue.
 3. **Check for an existing account.** Call `list_accounts` with the `providerId` and page until `nextPageToken` is absent.
    - This inbox already has one: this is a sign-in, not a new account. Say so and continue with [Sign back in](#sign-back-in).
-   - Another inbox has one and `get_provider` shows `ownerSignupLimit`: the provider caps sign-ups per organization. If the cap is reached (`0`, or as many accounts as the limit), offer to sign in with the inbox that already has an account instead.
-4. **Show what the user is agreeing to**: provider name and description, terms and privacy links from `get_provider`, and the inbox. An unlisted provider returns only its ID and name, with no `updatedAt`; say it is not a reviewed catalog entry. If the user named both the provider and the inbox, that request is the go-ahead; if you inferred either one, confirm first.
+   - Another inbox has one: prefer signing in with that inbox over creating a second account, and say why. Providers can cap sign-ups per organization.
+   - `ownerSignupLimit` on `get_provider` is a hint, not a count to check against. `0` means new sign-ups are paused, so use an inbox that already has an account. Otherwise do not work out the headroom from `list_accounts`: the cap counts every inbox that ever signed up, including disabled accounts that `list_accounts` does not show. Try the connect, and let its limit error decide.
+4. **Show what the user is agreeing to**: provider name and description, terms and privacy links from `get_provider`, and the inbox. An unlisted provider returns only its ID, plus its name when one is registered, with no `updatedAt`; say it is not a reviewed catalog entry. If the user named both the provider and the inbox, that request is the go-ahead; if you inferred either one, confirm first.
 5. **Call `connect_provider`** with `providerId` and `inboxId`. `inboxId` can be omitted only when the credential is scoped to one inbox.
 6. **Hand off the sign-in URL.** The response has `magicUrl`, `expiresAt`, and `apiKeyId`. Open `magicUrl` in the browser that should hold the sign-in:
    - If you control a browser, open it there. That browser keeps the agent's session at the provider.
@@ -57,7 +58,7 @@ Signing in is the same call as creating an account: `connect_provider` with the 
 
 - Use `list_accounts` for every provider, or pass `providerId` for one.
 - Pages can return fewer items than the limit, even zero, while `nextPageToken` is present. Keep paging until it is absent before saying an inbox has no account somewhere. Keep `providerId` the same across those pages.
-- Report inbox, provider name, first and last sign-in, and sign-in count. An account with no `providerName` is at a provider outside the curated catalog; `get_provider` resolves its name.
+- Report inbox, provider name, first and last sign-in, and sign-in count. An account with no `providerName` is at a provider outside the curated catalog; `get_provider` may resolve its name, but some providers have none.
 
 ## Not on AgentID
 
@@ -72,14 +73,18 @@ Do not fill in a third-party sign-up form on your own, and never solve a CAPTCHA
 
 - It is single-use, expires within minutes, and is never re-issued. Do not call `connect_provider` again for the same provider and inbox while an earlier URL is still live; live sessions are limited per caller.
 - It is a credential. Never put it in an email, draft, commit, log, or file, and never send it to anyone except the user who asked.
-- Pass `acceptDisclosure: true` only when the user has already accepted the provider's disclosure. If the call then fails with a 400 or 404, retry once without it.
+- Pass `acceptDisclosure: true` only when the user has already accepted the provider's disclosure.
 
 ## Errors
 
-- **Sign-up limit** (a limit error naming the provider's sign-ups): the provider caps sign-ups per organization and the cap is reached. Sign in with an inbox that already holds an account there (`list_accounts` with the `providerId`).
-- **Live session limit** (a rate-limit error): earlier sign-in URLs are still live. Wait for them to expire, about five minutes, then try again.
-- **Permission error**: the credential lacks `provider_connect`, or the organization is not verified yet. The user can enable `provider_connect` on the API key in the AgentMail console; do not look for another key.
-- **404** from `get_provider` or `connect_provider`: no provider is registered under that ID. Check the ID with the user; do not guess another.
+- **403 `limit_exceeded`** (provider sign-ups): the provider's per-organization sign-up cap is reached. Follow the error's `fix`: sign in with an inbox that already holds an account there (`list_accounts` with the `providerId`).
+- **429** (live sign-in links): at most five sign-in links can be live at once. Wait for the earlier ones to expire, per the error's retry time (up to five minutes), then try again.
+- **403 `missing_permission`**: the credential lacks `provider_connect`, or the organization is not verified yet. The user can enable `provider_connect` on the API key in the AgentMail console; do not look for another key.
+- **404**: read which resource the error names before asking the user anything.
+  - **Inbox**: the inbox is not in the organization, or not in the credential's scope. Check the inbox.
+  - **Provider** from `get_provider`: no provider is registered under that ID. Check the ID with the user; do not guess another.
+  - **Provider** from `connect_provider` for a provider that `get_provider` resolves: the provider has no working sign-in entry point yet. Tell the user it cannot be connected right now.
+  - With `acceptDisclosure: true`, the provider may not support accepting the disclosure up front. Retry once without it.
 - To stop an inbox from signing in to a provider, or to revoke a sign-in key, point the user to https://docs.agentmail.to/agentid-sign-in. The MCP server has no tool for either.
 
 ## Authorization

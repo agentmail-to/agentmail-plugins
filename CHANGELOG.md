@@ -4,7 +4,7 @@ All notable changes to the AgentMail plugin are documented here.
 
 ## 0.4.0 - 2026-09-29
 
-- Add the `agentmail-agentid` skill: create accounts for an agent at providers such as Firecrawl with AgentID, from finding the provider and the owning inbox through the sign-in link to storing the resulting API key, and list where each inbox has accounts.
+- Add the `agentid` skill: create accounts for an agent at providers such as Firecrawl with AgentID, from finding the provider and the owning inbox through the sign-in link to storing the resulting API key, and list where each inbox has accounts.
 - Describe Claude.ai and ChatGPT connector setup and the full hosted tool catalog in `agentmail-mcp`.
 - `check-email` reads single messages with `get_message`.
 - Mention AgentID in every plugin manifest and in the Codex default prompts.
