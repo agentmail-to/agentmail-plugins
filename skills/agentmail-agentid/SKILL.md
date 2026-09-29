@@ -10,7 +10,7 @@ description: Sign an AgentMail inbox in to third-party providers with AgentID, a
 | Tool | Use it to |
 | --- | --- |
 | `list_providers` | Browse the marketplace, most popular first. Paginated. |
-| `search_providers` | Find a provider by name prefix. Unpaginated; prefer specific names. |
+| `search_providers` | Find a provider by name prefix. Prefer specific names. |
 | `get_provider` | Read one provider by ID, including terms and privacy links. |
 | `list_accounts` | See which inboxes are signed in where. Pass `providerId` to narrow to one provider. |
 | `connect_provider` | Start signing an inbox in to a provider. Returns a single-use sign-in URL. |
