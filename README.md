@@ -9,7 +9,7 @@ The repository keeps shared Agent Skills portable while using native manifests a
 - `send-email` — draft, send, reply, and forward safely
 - `check-email` — search, read, summarize, and triage inboxes
 - `manage-inboxes` — create, inspect, update, and delete inboxes
-- `agentmail-agentid` — find providers, sign an inbox in with AgentID, and list provider accounts
+- `agentmail-agentid` — create accounts for your agent at providers like Firecrawl with AgentID, and list where it has accounts
 - `agentmail` — TypeScript and Python SDK implementation
 - `agentmail-mcp` — hosted MCP setup and troubleshooting
 - `agentmail-cli` — command-line workflows
@@ -59,28 +59,28 @@ ln -s "$(pwd)/agentmail-plugins" ~/.cursor/plugins/local/agentmail
 
 Reload Cursor after creating the link.
 
-## AgentID: providers and accounts
+## AgentID: create accounts for your agent
 
-[AgentID](https://www.agentid.com) lets an agent sign in to third-party providers using an AgentMail inbox as its identity. The hosted MCP server exposes it as five tools, and the `agentmail-agentid` skill carries the workflow:
+[AgentID](https://www.agentid.com) lets your agent create an account at a third-party service, such as a scraping, search, or database API, using an AgentMail inbox as its identity. No password or sign-up form: the inbox address is the account's email, and the provider's mail lands in that inbox.
+
+Ask in plain language once the MCP server is connected:
+
+- "Create an account at Firecrawl for my agent."
+- "My agent needs a web search API. Set one up."
+- "Log my agent back in to Turso."
+- "Which services is support-bot@agentmail.to signed up for?"
+
+The `agentmail-agentid` skill carries the whole job. It finds the provider, picks the inbox that will own the account (creating one if needed), and checks for an existing account and the provider's sign-up cap. Then it hands you a single-use sign-in link and confirms the account exists. Finally it helps you get what you came for, usually an API key stored in your secret store. Invoke it explicitly with `$agentmail-agentid` in Codex or `/agentmail:agentmail-agentid` in Claude Code; in Cursor, just ask.
 
 | Tool | What it does |
 | --- | --- |
-| `list_providers` / `search_providers` | Browse or search the provider marketplace |
-| `get_provider` | Read one provider, including its terms and privacy links |
-| `connect_provider` | Start signing an inbox in; returns a single-use sign-in URL |
-| `list_accounts` | Show which inboxes are signed in at which providers |
+| `search_providers` | Find a provider by name |
+| `list_providers` | Browse the marketplace; used to match a need such as "web search" to a provider |
+| `get_provider` | Read one provider, including its terms, privacy links, and sign-up cap |
+| `connect_provider` | Create an account, or sign an existing one back in; returns a single-use sign-in link |
+| `list_accounts` | Show which inboxes have accounts at which providers |
 
-Try it in any client once the MCP server is connected:
-
-- "Which providers is my agent inbox signed in to?"
-- "Find a web search provider in the AgentID marketplace."
-- "Sign support-bot@agentmail.to in to Firecrawl."
-
-Invoke the skill explicitly with `$agentmail-agentid` in Codex or `/agentmail:agentmail-agentid` in Claude Code. In Cursor, ask in plain language; the agent picks the skill up from its description.
-
-List and search show only the curated catalog. A registered provider that is not listed still works with `get_provider` and `connect_provider` when you have its ID.
-
-`connect_provider` returns a single-use sign-in URL that expires within minutes. Open it in the browser that should hold the sign-in, then confirm with `list_accounts`. The call needs the `provider_connect` permission on the credential. In Claude.ai and ChatGPT, the same tools are available through the AgentMail connector; see [Hosted MCP setup](https://docs.agentmail.to/integrations/mcp).
+List and search show only the curated catalog. A registered provider that is not listed still works with `get_provider` and `connect_provider` when you have its ID. The sign-in link expires within minutes and needs the `provider_connect` permission on the credential. In Claude.ai and ChatGPT, the same tools come through the AgentMail connector; see [Hosted MCP setup](https://docs.agentmail.to/integrations/mcp).
 
 ## Authentication
 

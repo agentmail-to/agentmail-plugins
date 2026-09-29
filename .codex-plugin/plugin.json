@@ -16,7 +16,7 @@
   "interface": {
     "displayName": "AgentMail",
     "shortDescription": "Email infrastructure for AI agents",
-    "longDescription": "Give your coding agent its own email inboxes. Create addresses on the fly, send and receive messages, manage threads, handle attachments, and automate email workflows, all through natural language. With AgentID, sign an inbox in to providers from the marketplace and see which inboxes hold accounts where.",
+    "longDescription": "Give your coding agent its own email inboxes. Create addresses on the fly, send and receive messages, manage threads, handle attachments, and automate email workflows, all through natural language. With AgentID, create accounts for your agent at services like Firecrawl or Turso using its inbox, and see where it already has accounts.",
     "developerName": "AgentMail",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
@@ -26,7 +26,7 @@
     "defaultPrompt": [
       "Create a new project inbox and draft a welcome email.",
       "Check my AgentMail inbox for new messages and summarize unread threads.",
-      "Sign my agent inbox in to a provider with AgentID and list its accounts."
+      "Create an account at Firecrawl for my agent with AgentID."
     ],
     "brandColor": "#6366F1",
     "composerIcon": "./assets/logo.svg",

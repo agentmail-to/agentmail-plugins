@@ -1,7 +1,7 @@
 interface:
-  display_name: "AgentID Sign-In"
-  short_description: "Connect inboxes to providers"
-  default_prompt: "Use $agentmail-agentid to find a provider, sign an inbox in, and list its accounts."
+  display_name: "AgentID Accounts"
+  short_description: "Create accounts at providers for your agent"
+  default_prompt: "Use $agentmail-agentid to create an account for my agent at a provider, such as Firecrawl."
 dependencies:
   tools:
     - type: "mcp"
