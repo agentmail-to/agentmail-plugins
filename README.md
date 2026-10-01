@@ -80,7 +80,7 @@ The `agentid` skill carries the whole job. It finds the app, picks the inbox tha
 | `connect_app` | Create an account, or sign an existing one back in; returns a single-use sign-in link |
 | `list_accounts` | Show which inboxes have accounts at which apps |
 
-List and search show only the curated catalog. A registered app that is not listed still works with `get_app` and `connect_app` when you have its ID. The sign-in link expires within minutes and needs the `provider_connect` permission on the credential. In Claude.ai and ChatGPT, the same tools come through the AgentMail connector; see [Hosted MCP setup](https://docs.agentmail.to/integrations/mcp).
+List and search show only the curated catalog. A registered app that is not listed still works with `get_app` and `connect_app` when you have its ID. The sign-in link expires within minutes and needs the `app_connect` permission on the credential. In Claude.ai and ChatGPT, the same tools come through the AgentMail connector; see [Hosted MCP setup](https://docs.agentmail.to/integrations/mcp).
 
 ## Authentication
 

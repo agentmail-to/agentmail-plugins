@@ -2,6 +2,10 @@
 
 All notable changes to the AgentMail plugin are documented here.
 
+## 0.5.1 - Unreleased
+
+- The permission `connect_app` needs is now named `app_connect`, not `provider_connect`. The `agentid` skill's 403 `missing_permission` guidance and the README name `app_connect`, the name the AgentMail API and console use.
+
 ## 0.5.0 - Unreleased
 
 - AgentID calls the services an agent creates accounts at "apps" now, not "providers". The `agentid` and `agentmail-mcp` skills use the renamed hosted MCP tools: `list_apps`, `search_apps`, `get_app`, and `connect_app` replace `list_providers`, `search_providers`, `get_provider`, and `connect_provider`, with no aliases. They take `appId` and return `appId` and `appName`. `list_accounts` keeps its name.
