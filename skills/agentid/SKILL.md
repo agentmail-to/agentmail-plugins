@@ -79,7 +79,7 @@ Do not fill in a third-party sign-up form on your own, and never solve a CAPTCHA
 
 - **403 `limit_exceeded`** (app sign-ups): the app's per-organization sign-up cap is reached. Follow the error's `fix`: sign in with an inbox that already holds an account there (`list_accounts` with the `appId`).
 - **429** (live sign-in links): at most five sign-in links can be live at once. Wait for the earlier ones to expire, per the error's retry time (up to five minutes), then try again.
-- **403 `missing_permission`**: the credential lacks `provider_connect`, or the organization is not verified yet. The user can enable `provider_connect` on the API key in the AgentMail console; do not look for another key.
+- **403 `missing_permission`**: the credential lacks `app_connect`, or the organization is not verified yet. The user can enable `app_connect` on the API key in the AgentMail console; do not look for another key.
 - **404**: read which resource the error names before asking the user anything.
   - **Inbox**: the inbox is not in the organization, or not in the credential's scope. Check the inbox.
   - **App** from `get_app`: no app is registered under that ID. Check the ID with the user; do not guess another.
