@@ -6,7 +6,7 @@ Use this when "my agent's email didn't arrive." Find the branch that matches the
 
 - Subscribe to the `message.bounced` event (webhook or WebSocket) — a successful `send()` call only confirms AgentMail accepted the message, not that it was delivered.
 - Check whether `feedback_enabled` is set on the sending domain. When enabled, AgentMail routes bounce and complaint notifications to your inboxes; if it was never set, you may be missing that feedback entirely. See [admin.md](admin.md#domains).
-- Self-monitor bounce rate with `client.metrics.query(event_types=["message.bounced"], ...)` / `client.metrics.query({ eventTypes: ["message.bounced"], ... })`.
+- Self-monitor bounce rate with `client.metrics.query_events(event_types=["message.bounced"], ...)` / `client.metrics.queryEvents({ eventTypes: ["message.bounced"], ... })`.
 
 ## Delivered, but landing in spam
 
