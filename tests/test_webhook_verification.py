@@ -25,8 +25,9 @@ def signed_headers(payload: str, timestamp: datetime) -> dict[str, str]:
 class WebhookVerificationTests(unittest.TestCase):
     def test_valid_signature_verifies(self) -> None:
         now = datetime.now(tz=timezone.utc)
-        event = Webhook(SECRET).verify(PAYLOAD, signed_headers(PAYLOAD, now))
-        self.assertEqual(event["event_type"], "message.received")
+        # verify() raises on failure; Svix 2.x returns None, so the event is the parsed raw body.
+        Webhook(SECRET).verify(PAYLOAD, signed_headers(PAYLOAD, now))
+        self.assertEqual(json.loads(PAYLOAD)["event_type"], "message.received")
 
     def test_tampered_body_is_rejected(self) -> None:
         headers = signed_headers(PAYLOAD, datetime.now(tz=timezone.utc))

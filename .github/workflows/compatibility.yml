@@ -57,7 +57,7 @@ jobs:
         run: |
           version="$(node -p "require('./compatibility.json').cli")"
           npx -y "agentmail-cli@$version" inboxes --help | tee /tmp/inboxes-help
-          npx -y "agentmail-cli@$version" inboxes:messages --help | tee /tmp/messages-help
+          npx -y "agentmail-cli@$version" inboxes messages --help | tee /tmp/messages-help
           grep -q "get" /tmp/inboxes-help
           grep -q "get" /tmp/messages-help
           ! grep -q "retrieve" /tmp/inboxes-help

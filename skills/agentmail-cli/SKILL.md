@@ -12,7 +12,7 @@ npm install -g agentmail-cli
 export AGENTMAIL_API_KEY="am_..."
 ```
 
-Subcommands for a resource nested under another use a colon, e.g. `inboxes:messages`, `inboxes:threads`, `pods:inboxes`, `pods:threads`.
+A resource nested under another is a nested subcommand, e.g. `inboxes messages`, `inboxes threads`, `pods inboxes`, `pods threads` (CLI 1.x; the colon form `inboxes:messages` is rejected). Run `agentmail <resource> --help` to list what a resource supports.
 
 ## Inboxes
 
@@ -28,30 +28,30 @@ Confirm the exact inbox before running the destructive delete command.
 ## Messages and threads
 
 ```bash
-agentmail inboxes:messages list --inbox-id <inbox_id>
-agentmail inboxes:messages get --inbox-id <inbox_id> --message-id <message_id>
+agentmail inboxes messages list --inbox-id <inbox_id>
+agentmail inboxes messages get --inbox-id <inbox_id> --message-id <message_id>
 
-agentmail inboxes:messages send --inbox-id <inbox_id> \
+agentmail inboxes messages send --inbox-id <inbox_id> \
   --to "recipient@example.com" \
   --subject "Hello" \
   --text "Message body"
 
 # HTML body instead of plain text
-agentmail inboxes:messages send --inbox-id <inbox_id> \
+agentmail inboxes messages send --inbox-id <inbox_id> \
   --to "recipient@example.com" \
   --subject "Hello" \
   --html "<h1>Hello</h1>"
 
-agentmail inboxes:messages reply --inbox-id <inbox_id> \
+agentmail inboxes messages reply --inbox-id <inbox_id> \
   --message-id <message_id> \
   --text "Reply body"
 
-agentmail inboxes:messages forward --inbox-id <inbox_id> \
+agentmail inboxes messages forward --inbox-id <inbox_id> \
   --message-id <message_id> \
   --to "someone@example.com"
 
-agentmail inboxes:threads list --inbox-id <inbox_id>
-agentmail inboxes:threads get --inbox-id <inbox_id> --thread-id <thread_id>
+agentmail inboxes threads list --inbox-id <inbox_id>
+agentmail inboxes threads get --inbox-id <inbox_id> --thread-id <thread_id>
 ```
 
 Use a message ID for replies. Fetch the full message before relying on body content.
@@ -59,14 +59,14 @@ Use a message ID for replies. Fetch the full message before relying on body cont
 ## Drafts
 
 ```bash
-agentmail inboxes:drafts create --inbox-id <inbox_id> \
+agentmail inboxes drafts create --inbox-id <inbox_id> \
   --to "recipient@example.com" \
   --subject "Pending approval" \
   --text "Draft body"
 
-agentmail inboxes:drafts list --inbox-id <inbox_id>
-agentmail inboxes:drafts get --inbox-id <inbox_id> --draft-id <draft_id>
-agentmail inboxes:drafts send --inbox-id <inbox_id> --draft-id <draft_id>
+agentmail inboxes drafts list --inbox-id <inbox_id>
+agentmail inboxes drafts get --inbox-id <inbox_id> --draft-id <draft_id>
+agentmail inboxes drafts send --inbox-id <inbox_id> --draft-id <draft_id>
 ```
 
 ## Pods
@@ -77,11 +77,11 @@ Pods group inboxes together.
 agentmail pods create --name "My Pod"
 agentmail pods list
 
-agentmail pods:inboxes create --pod-id <pod_id> --display-name "Pod Inbox"
-agentmail pods:inboxes list --pod-id <pod_id>
+agentmail pods inboxes create --pod-id <pod_id> --display-name "Pod Inbox"
+agentmail pods inboxes list --pod-id <pod_id>
 
-agentmail pods:threads list --pod-id <pod_id>
-agentmail pods:threads get --pod-id <pod_id> --thread-id <thread_id>
+agentmail pods threads list --pod-id <pod_id>
+agentmail pods threads get --pod-id <pod_id> --thread-id <thread_id>
 ```
 
 ## Webhooks

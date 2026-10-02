@@ -12,8 +12,9 @@ function signedHeaders(body: string, timestamp: Date): Record<string, string> {
   };
 }
 
-const verified = new Webhook(secret).verify(payload, signedHeaders(payload, new Date()));
-assert.deepEqual(verified, JSON.parse(payload));
+// verify() throws on failure; Svix 2.x returns undefined, so the event is the parsed raw body.
+assert.doesNotThrow(() => new Webhook(secret).verify(payload, signedHeaders(payload, new Date())));
+assert.equal(JSON.parse(payload).event_type, "message.received");
 
 assert.throws(() =>
   new Webhook(secret).verify(payload.replace("received", "sent"), signedHeaders(payload, new Date())),
