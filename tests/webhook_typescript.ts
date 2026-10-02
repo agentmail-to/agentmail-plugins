@@ -7,10 +7,8 @@ if (!secret) throw new Error("AGENTMAIL_WEBHOOK_SECRET is required");
 const app = express();
 app.post("/webhooks", express.raw({ type: "application/json" }), (req, res) => {
   try {
-    const event = new Webhook(secret).verify(
-      req.body,
-      req.headers as Record<string, string>,
-    );
+    new Webhook(secret).verify(req.body, req.headers as Record<string, string>);
+    const event = JSON.parse(req.body.toString());
     void event;
     res.status(204).send();
   } catch {

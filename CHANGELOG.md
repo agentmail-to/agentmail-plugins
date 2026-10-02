@@ -8,6 +8,8 @@ All notable changes to the AgentMail plugin are documented here.
 - The authorization row for connecting is now "Connect inbox to app".
 - The permission `connect_app` needs is now named `app_connect`, not `provider_connect`. The `agentid` skill's 403 `missing_permission` guidance and the README name `app_connect`, the name the AgentMail API and console use.
 - The `agentmail` skill's deliverability reference calls `client.metrics.query_events` / `queryEvents`; `metrics.query` is gone from the current SDKs.
+- The webhook verification examples verify the signature and then parse the raw body: Svix 2.x `Webhook.verify` returns nothing (`undefined` / `None`), so the old examples dispatched an empty event.
+- The `agentmail-cli` skill uses nested subcommands (`agentmail inboxes messages list`); CLI 1.x rejects the colon form (`inboxes:messages`) the skill used before.
 - Track AgentMail SDK TypeScript 0.5.35 and Python 2.0.8, CLI 1.8.0, and AgentMail Toolkit TypeScript 0.10.0 and Python 0.3.0.
 
 ## 0.4.0 - 2026-09-29

@@ -63,10 +63,10 @@ if (!secret) throw new Error("AGENTMAIL_WEBHOOK_SECRET is required");
 const app = express();
 app.post("/webhooks", express.raw({ type: "application/json" }), (req, res) => {
   try {
-    const event = new Webhook(secret).verify(
-      req.body,
-      req.headers as Record<string, string>,
-    );
+    // verify() throws on a bad signature or stale timestamp. Svix 2.x returns nothing, so parse the
+    // raw body yourself once it passes.
+    new Webhook(secret).verify(req.body, req.headers as Record<string, string>);
+    const event = JSON.parse(req.body.toString());
     void event; // Enqueue or dispatch the verified event here.
     res.status(204).send();
   } catch {
@@ -78,6 +78,7 @@ app.post("/webhooks", express.raw({ type: "application/json" }), (req, res) => {
 ## Python verification
 
 ```python
+import json
 import os
 
 from flask import Flask, request
@@ -88,12 +89,15 @@ secret = os.environ["AGENTMAIL_WEBHOOK_SECRET"]
 
 @app.post("/webhooks")
 def receive_webhook():
+    payload = request.get_data()
     try:
-        event = Webhook(secret).verify(request.get_data(), request.headers)
+        # Raises on a bad signature or stale timestamp. Svix 2.x returns None, so parse the raw body
+        # yourself once it passes.
+        Webhook(secret).verify(payload, request.headers)
     except WebhookVerificationError:
         return "", 400
 
-    # Enqueue or dispatch the verified event here.
+    event = json.loads(payload)  # Enqueue or dispatch the verified event here.
     return "", 204
 ```
 
