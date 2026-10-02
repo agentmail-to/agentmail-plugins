@@ -86,7 +86,7 @@ MCP clients get the tool catalog and schemas live from the hosted runtime; do no
 The catalog covers more than mail. Point users at these groups when they ask what the connector can do:
 
 - **Inboxes, threads, messages, drafts, attachments, and allow/block lists** — the mail workflows in the sibling action skills.
-- **AgentID providers and accounts** — `list_providers`, `search_providers`, `get_provider`, `connect_provider`, and `list_accounts` create accounts for an agent at third-party services (for example "create an account at Firecrawl") and show where each inbox already has one. Use the `agentid` skill for that workflow.
+- **AgentID apps and accounts** — `list_apps`, `search_apps`, `get_app`, `connect_app`, and `list_accounts` create accounts for an agent at third-party apps (for example "create an account at Firecrawl") and show where each inbox already has one. Use the `agentid` skill for that workflow.
 - **Agent sign-up** — `agent_attach_human` and `agent_verify` lift an unverified agent organization's limits.
 
 ## Stdio Compatibility
@@ -97,7 +97,7 @@ For a stdio-only client, use the supported npm or PyPI `agentmail-mcp` package. 
 
 1. Restart the client or open a new session after installing the plugin.
 2. Inspect MCP status in the client and complete authentication.
-3. Call `list_inboxes` as a read-only smoke test. Call `list_providers` to confirm the AgentID tools are exposed.
+3. Call `list_inboxes` as a read-only smoke test. Call `list_apps` to confirm the AgentID tools are exposed.
 4. Confirm that read, write, and destructive tool annotations produce the expected approval behavior.
 
 ## Troubleshoot
