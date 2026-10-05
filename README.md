@@ -14,6 +14,7 @@ The repository keeps shared Agent Skills portable while using native manifests a
 - `agentmail-mcp` — hosted MCP setup and troubleshooting
 - `agentmail-cli` — command-line workflows
 - `agentmail-toolkit` — framework adapters for agent applications
+- `agent-email-patterns` — agent email architecture, security, and provider tradeoffs
 
 Detailed SDK material uses progressive references so agents only load the language or real-time guidance required for the task.
 
@@ -49,15 +50,44 @@ Install from the [Cursor Marketplace](https://cursor.com/marketplace/agentmail):
 
 Complete the AgentMail OAuth browser sign-in when the MCP server first connects.
 
-To test this repository directly instead, clone it and symlink it into Cursor's local plugin directory:
+To test this repository directly instead, clone it into Cursor's local plugin
+directory:
 
 ```bash
-git clone https://github.com/agentmail-to/agentmail-plugins.git
 mkdir -p ~/.cursor/plugins/local
-ln -s "$(pwd)/agentmail-plugins" ~/.cursor/plugins/local/agentmail
+git clone https://github.com/agentmail-to/agentmail-plugins.git ~/.cursor/plugins/local/agentmail
 ```
 
-Reload Cursor after creating the link.
+Reload Cursor after cloning. Cursor only follows local-plugin symlinks whose
+targets also resolve inside `~/.cursor/plugins/local`, so a symlink to a checkout
+elsewhere is not a supported test setup.
+
+## Updating an existing installation
+
+Plugin releases use one synchronized version across all package manifests. After
+an update is published, refresh the source and load the new plugin in a new
+session:
+
+### Codex
+
+```bash
+codex plugin marketplace upgrade agentmail
+```
+
+### Claude Code
+
+```bash
+claude plugin update agentmail@agentmail
+```
+
+Run `/reload-plugins` in an existing Claude Code session, or start a new one.
+Third-party Claude marketplaces do not enable automatic updates by default.
+
+### Cursor
+
+Update AgentMail from the Cursor Marketplace after the new revision has passed
+Cursor's review, then start a new chat. Public Cursor plugin updates are reviewed
+before publication, so a repository release can precede marketplace availability.
 
 ## AgentID: create accounts for your agent
 
@@ -113,6 +143,10 @@ claude plugin validate . --strict
 ```
 
 Use disposable inboxes and controlled recipients for integration testing. Automated validation must not send mail or delete live resources.
+
+The complete contract-driven release and marketplace procedure lives in
+[`docs/release.md`](docs/release.md). Follow it whenever packaged content changes;
+an MCP implementation-only release does not automatically require a plugin bump.
 
 ## Sources
 

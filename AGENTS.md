@@ -21,6 +21,11 @@ When sources disagree, verify the shipped interface and document the discrepancy
 - Use only `name` and `description` in shared `SKILL.md` frontmatter.
 - Keep `agents/openai.yaml` synchronized with its skill. Declare MCP dependencies only for skills that call MCP tools.
 - Keep all plugin manifest versions synchronized and update `CHANGELOG.md` and `compatibility.json` with each release.
+- Treat `agentmail-skills` as the only source for `skills/`. Synchronize it from
+  the generated `agentmail-mcp` manifest, then export the complete tree; never
+  patch generated skill copies in this repository.
+- Follow `docs/release.md` for every plugin release. Public-contract changes must
+  exercise both clean-install and existing-user upgrade paths in every client.
 
 ## Safety
 
@@ -44,4 +49,11 @@ python3 scripts/check_compatibility.py
 claude plugin validate . --strict
 ```
 
-Also validate clean installation and read-only `list_inboxes` behavior in Codex, Claude Code, and Cursor before a marketplace release.
+Also validate clean installation and existing-user upgrade behavior in Codex,
+Claude Code, and Cursor before a marketplace release. Use only tools whose
+released manifest annotations mark them read-only, including one tool from each
+changed capability.
+
+For a release, also run the upstream contract/export checks and the complete
+client matrix in `docs/release.md`. After Cursor approval, run
+`python3 scripts/check_cursor_marketplace.py` from the released commit.

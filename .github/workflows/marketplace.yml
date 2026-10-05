@@ -55,3 +55,35 @@ jobs:
           npm install --global @anthropic-ai/claude-code
           claude plugin validate . --strict
           claude plugin validate .claude-plugin/plugin.json --strict
+
+  canonical-sources:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout plugin
+        uses: actions/checkout@v4
+        with:
+          path: agentmail-plugins
+
+      - name: Checkout canonical skills
+        uses: actions/checkout@v4
+        with:
+          repository: agentmail-to/agentmail-skills
+          path: agentmail-skills
+
+      - name: Checkout canonical MCP contract
+        uses: actions/checkout@v4
+        with:
+          repository: agentmail-to/agentmail-mcp
+          path: agentmail-mcp
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Check canonical skills against MCP
+        working-directory: agentmail-skills
+        run: python3 scripts/skills.py sync --check --backend ../agentmail-mcp
+
+      - name: Check plugin skill export
+        working-directory: agentmail-skills
+        run: python3 scripts/skills.py build --check --target ../agentmail-plugins
