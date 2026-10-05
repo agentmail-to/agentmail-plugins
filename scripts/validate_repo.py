@@ -67,6 +67,13 @@ else:
     if f"## {version} " not in changelog:
         error(f"CHANGELOG.md has no entry for {version}")
 
+descriptions = {name: manifest.get("description") for name, manifest in manifests.items()}
+marketplace_description = load_json(".claude-plugin/marketplace.json").get("plugins", [{}])[0].get("description")
+if len(set(descriptions.values())) != 1 or None in descriptions.values():
+    error(f"plugin manifest descriptions are not synchronized: {descriptions}")
+elif marketplace_description != next(iter(descriptions.values())):
+    error("Claude marketplace description does not match the package manifests")
+
 for surface, manifest in manifests.items():
     if manifest.get("name") != "agentmail":
         error(f"{surface} manifest name must be agentmail")
@@ -86,6 +93,10 @@ if any((ROOT / "commands").glob("*")):
 
 skills_root = ROOT / "skills"
 skill_dirs = sorted(path for path in skills_root.iterdir() if path.is_dir())
+readme = (ROOT / "README.md").read_text(encoding="utf-8")
+for skill_dir in skill_dirs:
+    if f"- `{skill_dir.name}` " not in readme:
+        error(f"README.md does not list the {skill_dir.name} skill")
 
 frontmatter_pattern = re.compile(r"\A---\n(.*?)\n---\n", re.DOTALL)
 for skill_dir in skill_dirs:
