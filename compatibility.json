@@ -1,12 +1,12 @@
 {
-  "verifiedAt": "2026-10-05",
+  "verifiedAt": "2026-10-06",
   "agentmail": {
-    "typescript": "0.5.36",
-    "python": "2.0.9"
+    "typescript": "0.5.40",
+    "python": "2.0.12"
   },
-  "cli": "1.8.0",
+  "cli": "1.9.0",
   "toolkit": {
-    "typescript": "0.10.0",
+    "typescript": "0.11.0",
     "python": "0.3.0"
   }
 }

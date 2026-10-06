@@ -86,7 +86,7 @@ MCP clients get the tool catalog and schemas live from the hosted runtime; do no
 The catalog covers more than mail. Point users at these groups when they ask what the connector can do:
 
 - **Inboxes, threads, messages, drafts, attachments, and allow/block lists** — the mail workflows in the sibling action skills.
-- **AgentID apps and accounts** — `list_apps`, `search_apps`, `get_app`, `connect_app`, and `list_accounts` create accounts for an agent at third-party apps (for example "create an account at Firecrawl") and show where each inbox already has one. Use the `agentid` skill for that workflow.
+- **AgentID apps and accounts** — `list_apps`, `search_apps`, `get_app`, `connect_app`, and `list_accounts` create accounts for an agent at third-party apps (for example "create an account at Firecrawl") and show where each inbox already has one. Catalog apps can be named by slug (`firecrawl`), and `list_apps` filters by category. Use the `agentid` skill for that workflow.
 - **Agent sign-up** — `agent_attach_human` and `agent_verify` lift an unverified agent organization's limits.
 
 ## Stdio Compatibility
@@ -103,6 +103,7 @@ For a stdio-only client, use the supported npm or PyPI `agentmail-mcp` package. 
 ## Troubleshoot
 
 - A 404 usually means the URL is missing `/mcp`.
+- A tool or parameter in the published manifest is missing from the session (for example `list_apps` has no `category`): the hosted server does not announce catalog changes, so a session keeps the tool list it had at connect. Start a new session or reconnect the connector.
 - "Invalid API key" or a 401 with API-key auth usually means the key is wrong, revoked, lacks the necessary permissions, or `AGENTMAIL_API_KEY` was not available to the client process.
 - "Unauthorized" or a 401 with OAuth usually means the sign-in is incomplete or the session expired — drop any `apiKey` query param and let the client complete the browser-based OAuth flow instead.
 - Use the full `am_` key value and prefer the narrowest suitable organization, pod, or inbox scope.

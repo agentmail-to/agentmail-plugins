@@ -21,7 +21,12 @@ The goal is almost never the sign-in itself. It is a working account the agent c
 
 ## Create an account
 
-1. **Find the app.** Call `search_apps` with the name. One match: use it. Several: show name, description, and ID, and ask. Never pick between look-alike names yourself. No match and no ID: see [Not on AgentID](#not-on-agentid). If the user gave an app ID, skip search and call `get_app`; list and search show only the curated catalog, but any registered app resolves by ID and can be connected once it has a sign-in entry point.
+1. **Find the app.**
+   - The user named the app: call `get_app` with its slug, the name lowercased without spaces or punctuation (`firecrawl`). A catalog app resolves in one call.
+   - The slug 404s: call `search_apps` with the name. One match: use it. Several: show name, description, and ID, and ask. Never pick between look-alike names yourself. No match: see [Not on AgentID](#not-on-agentid).
+   - The user gave an app ID: call `get_app` with it. List, search, and slugs cover only the curated catalog, but any registered app resolves by ID and can be connected once it has a sign-in entry point.
+
+   From here on, pass the `appId` that `get_app` returned. `list_accounts` and `connect_app` also accept the slug, but the ID is permanent: use it in anything you store or report.
 2. **Pick the inbox that will own the account.** The inbox is the agent's identity at the app.
    - The user named one: use it.
    - The organization has one inbox (`list_inboxes`): use it and say which.
@@ -48,7 +53,7 @@ After the account exists, do what the user came for:
 
 ## Find an app for a need
 
-`search_apps` matches names only, so a need like "web search" or "a database" will not match. Page through `list_apps` and match descriptions to the need. Offer the one to three best fits with a one-line description each, and any sign-up cap. Let the user choose, then [create an account](#create-an-account).
+`search_apps` matches names only, so a need like "web search" or "a database" will not match. Call `list_apps` with the `category` that fits the need (such as `search`, `scraping`, `browser`, `data`, or `payments`; the tool schema lists every value), and match descriptions to the need. A filtered page can hold fewer apps than the limit while more remain: page until `nextPageToken` is absent, and reuse a `pageToken` only with the category it came from. Apps carry up to three `categories` and some carry none, so if the category comes up empty or close, page through `list_apps` without one before saying nothing fits. Offer the one to three best fits with a one-line description each, and any sign-up cap. Let the user choose, then [create an account](#create-an-account).
 
 ## Sign back in
 
@@ -62,7 +67,7 @@ Signing in is the same call as creating an account: `connect_app` with the inbox
 
 ## Not on AgentID
 
-If search and the full list both miss and the user has no app ID, say the service is not available through AgentID. Then offer:
+If the slug, search, and the full list all miss and the user has no app ID, say the service is not available through AgentID. Then offer:
 
 - a catalog app that meets the same need, or
 - that the user signs up on the app's own site with the inbox address as the email. You can read the verification email for them with check-email.
@@ -82,7 +87,8 @@ Do not fill in a third-party sign-up form on your own, and never solve a CAPTCHA
 - **403 `missing_permission`**: the credential lacks `app_connect`, or the organization is not verified yet. The user can enable `app_connect` on the API key in the AgentMail console; do not look for another key.
 - **404**: read which resource the error names before asking the user anything.
   - **Inbox**: the inbox is not in the organization, or not in the credential's scope. Check the inbox.
-  - **App** from `get_app`: no app is registered under that ID. Check the ID with the user; do not guess another.
+  - **App** from `get_app` with a slug: no catalog app has that slug. Fall back to `search_apps` with the name.
+  - **App** from `get_app` with an ID: no app is registered under that ID. Check the ID with the user; do not guess another.
   - **App** from `connect_app` for an app that `get_app` resolves: the app has no working sign-in entry point yet. Tell the user it cannot be connected right now.
   - With `acceptDisclosure: true`, the app may not support accepting the disclosure up front. Retry once without it.
 - To stop an inbox from signing in to an app, or to revoke a sign-in key, point the user to https://docs.agentmail.to/agentid-sign-in. The MCP server has no tool for either.
