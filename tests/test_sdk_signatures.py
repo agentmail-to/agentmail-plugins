@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check documented Python calls against agentmail 0.5.6 signatures."""
+"""Check documented Python calls against the agentmail version pinned in compatibility.json."""
 
 import inspect
 
@@ -16,6 +16,8 @@ create_params = params(client.inboxes.create)
 assert "request" in create_params
 assert "username" not in create_params
 assert "client_id" not in create_params
+assert {"inbox_id", "display_name", "status", "metadata"} <= params(client.inboxes.update)
+assert {"limit", "page_token", "category"} <= params(client.apps.list)
 
 assert {"inbox_id", "to", "subject", "text"} <= params(client.inboxes.messages.send)
 assert {"inbox_id", "message_id"} <= params(client.inboxes.messages.get)

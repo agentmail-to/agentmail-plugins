@@ -2,6 +2,13 @@
 
 All notable changes to the AgentMail plugin are documented here.
 
+## 0.6.0 - 2026-10-06
+
+- The `agentid` skill finds a named app with `get_app` and the app's slug (`firecrawl`), falling back to `search_apps` when the slug 404s, as the hosted MCP's instructions now direct. Later steps pass the `appId` it returns; `list_accounts` and `connect_app` accept the slug too, but the ID is the permanent one to store.
+- To find an app for a need, the `agentid` skill filters `list_apps` by `category` (such as `search`, `scraping`, or `payments`), pages until `nextPageToken` is absent since filtered pages can come back short, and falls back to the unfiltered list for apps without categories.
+- The `agentmail-mcp` skill mentions slugs and the category filter, and explains that a session keeps the tool list it connected with: a tool or parameter missing from the session needs a new session or a connector reconnect.
+- Track AgentMail SDK TypeScript 0.5.40 and Python 2.0.12, CLI 1.9.0, and AgentMail Toolkit TypeScript 0.11.0. The signature fixtures cover inbox `status` (pause and resume) and the `apps.list` category filter.
+
 ## 0.5.0 - 2026-10-02
 
 - AgentID calls the services an agent creates accounts at "apps" now, not "providers". The `agentid` and `agentmail-mcp` skills use the renamed hosted MCP tools: `list_apps`, `search_apps`, `get_app`, and `connect_app` replace `list_providers`, `search_providers`, `get_provider`, and `connect_provider`, with no aliases. They take `appId` and return `appId` and `appName`. `list_accounts` keeps its name.

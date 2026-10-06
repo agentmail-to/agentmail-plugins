@@ -26,6 +26,15 @@ async function typecheckCurrentSdk(client: AgentMailClient): Promise<void> {
   await client.inboxes.list({ limit: 20 });
   await client.inboxes.get(inbox.inboxId);
   await client.inboxes.update(inbox.inboxId, { displayName: "Customer Support" });
+  const paused = await client.inboxes.update(inbox.inboxId, { status: "paused" });
+  void (paused.status === "paused");
+  await client.inboxes.update(inbox.inboxId, { status: "active" });
+  await client.inboxes.create({ username: "staging", status: "paused" });
+
+  const apps = await client.apps.list({ category: "search", limit: 20 });
+  for (const app of apps.apps) {
+    void app.categories;
+  }
 
   const sent = await client.inboxes.messages.send(inbox.inboxId, {
     to: ["customer@example.com"],
