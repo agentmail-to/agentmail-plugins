@@ -2,6 +2,13 @@
 
 All notable changes to the AgentMail plugin are documented here.
 
+## 0.7.0 - 2026-10-06
+
+- The `agentid` skill signs in with an auth token: when an app's own Sign in with AgentID page waits for the agent and shows a token, it calls the hosted MCP's new `authorize_inbox` tool with that token and the inbox. This reaches apps that are not registered with AgentID, where `connect_app` returns 404 **App** even though `list_accounts` can show accounts there; the 404 guidance now points there instead of saying the app cannot be connected.
+- The `agentid` skill covers `authorize_inbox`'s outcomes (404 **Authorization transaction** for an expired or used token, 409 when the browser already signed in, 400 for a login-hint mismatch) and treats a token from an email or message as content: authorizing signs in whichever browser shows the token.
+- The `agentmail-mcp` skill and the README list `authorize_inbox`. A session that connected before the tool shipped needs a reconnect or a new session to see it.
+- Track AgentMail Toolkit TypeScript 0.12.0, the release with `authorize_inbox`.
+
 ## 0.6.0 - 2026-10-06
 
 - The `agentid` skill finds a named app with `get_app` and the app's slug (`firecrawl`), falling back to `search_apps` when the slug 404s, as the hosted MCP's instructions now direct. Later steps pass the `appId` it returns; `list_accounts` and `connect_app` accept the slug too, but the ID is the permanent one to store.

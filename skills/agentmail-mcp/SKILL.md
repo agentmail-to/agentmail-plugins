@@ -86,7 +86,7 @@ MCP clients get the tool catalog and schemas live from the hosted runtime; do no
 The catalog covers more than mail. Point users at these groups when they ask what the connector can do:
 
 - **Inboxes, threads, messages, drafts, attachments, and allow/block lists** — the mail workflows in the sibling action skills.
-- **AgentID apps and accounts** — `list_apps`, `search_apps`, `get_app`, `connect_app`, and `list_accounts` create accounts for an agent at third-party apps (for example "create an account at Firecrawl") and show where each inbox already has one. Catalog apps can be named by slug (`firecrawl`), and `list_apps` filters by category. Use the `agentid` skill for that workflow.
+- **AgentID apps and accounts** — `list_apps`, `search_apps`, `get_app`, `connect_app`, `authorize_inbox`, and `list_accounts` create accounts for an agent at third-party apps (for example "create an account at Firecrawl") and show where each inbox already has one. `authorize_inbox` finishes a sign-in that an app's Sign in with AgentID page started, using the auth token the page shows, including at apps not registered with AgentID. Catalog apps can be named by slug (`firecrawl`), and `list_apps` filters by category. Use the `agentid` skill for that workflow.
 - **Agent sign-up** — `agent_attach_human` and `agent_verify` lift an unverified agent organization's limits.
 
 ## Stdio Compatibility
