@@ -2,6 +2,13 @@
 
 All notable changes to the AgentMail plugin are documented here.
 
+## 0.8.0 - 2026-10-26
+
+- A new account starts with no inboxes, and the first request used to stall on "which inbox should I send from?". The `send-email` skill now creates one inbox with default fields when the account has none. It tells the user the address and that the address is the agent's own, not their personal mailbox. The send still shows a preview and asks for confirmation, because the sender was inferred.
+- With no inboxes, the `check-email` skill says so, explains that AgentMail inboxes are the agent's own addresses, and offers to create one and send the user a first message from it.
+- `manage-inboxes` and the "Create/update inbox" authorization row allow that one first inbox and require reporting its address. Every other inbox still needs a request with explicit fields or a preview.
+- Track AgentMail SDK TypeScript 0.5.46 and Python 2.0.18, CLI 1.10.0, and AgentMail Toolkit TypeScript 0.16.0 and Python 0.3.2.
+
 ## 0.7.0 - 2026-10-06
 
 - The `agentid` skill signs in with an auth token: when an app's own Sign in with AgentID page waits for the agent and shows a token, it calls the hosted MCP's new `authorize_inbox` tool with that token and the inbox. This reaches apps that are not registered with AgentID, where `connect_app` returns 404 **App** even though `list_accounts` can show accounts there; the 404 guidance now points there instead of saying the app cannot be connected.

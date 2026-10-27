@@ -16,7 +16,7 @@ Use AgentMail MCP tools to prepare and deliver email without guessing externally
 
 ## Execute safely
 
-1. Resolve the sending inbox with `list_inboxes` when the user did not name one. If multiple candidates remain or listing is unavailable, ask for the exact sender inbox. Do not create an inbox unless the user asked for one.
+1. Resolve the sending inbox with `list_inboxes` when the user did not name one. If multiple candidates remain or listing is unavailable, ask for the exact sender inbox. If the account has no inboxes, create one with `create_inbox` and default fields, then tell the user its address and that it is the agent's own address, not their personal mailbox. Do not create any other inbox unless the user asked for one.
 2. For replies or forwards, fetch the thread with `get_thread` and identify the exact message ID.
 3. Preserve the user's meaning. Do not invent recipients, attachments, claims, signatures, or commitments.
 4. Include plain text and HTML when both are available; keep their content equivalent.

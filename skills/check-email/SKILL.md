@@ -9,7 +9,7 @@ Use read operations to find the relevant mail, then fetch enough context to answ
 
 ## Read workflow
 
-1. Resolve the inbox with `list_inboxes` when the user did not specify one.
+1. Resolve the inbox with `list_inboxes` when the user did not specify one. If the account has no inboxes, say so and explain that AgentMail inboxes are the agent's own addresses, not the user's personal mailbox. Offer to create one and send the user a first message from it, so they have its address.
 2. Use `search_messages` or `search_threads` for keywords; use list operations for recency, sender, recipient, label, or date filters.
 3. Follow pagination until the requested range is covered. Do not imply that the first page is the entire mailbox.
 4. List and search results contain only previews. Fetch a single hit with `get_message`, or the whole conversation with `get_thread`, before summarizing body content.
