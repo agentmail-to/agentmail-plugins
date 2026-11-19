@@ -2,6 +2,10 @@
 
 All notable changes to the AgentMail plugin are documented here.
 
+## 0.8.1 - 2026-11-18
+
+- The plugin description now leads with what sets AgentMail apart from a mailbox connector: the agent gets its own email address, separate from the user's mailbox. New accounts often expected to read their existing mail and stopped when they found no inboxes. No skill or MCP changes.
+
 ## 0.8.0 - 2026-10-26
 
 - A new account starts with no inboxes, and the first request used to stall on "which inbox should I send from?". The `send-email` skill now creates one inbox with default fields when the account has none. It tells the user the address and that the address is the agent's own, not their personal mailbox. The send still shows a preview and asks for confirmation, because the sender was inferred.
