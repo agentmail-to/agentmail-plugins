@@ -9,7 +9,7 @@
     {
       "name": "agentmail",
       "source": "./",
-      "description": "Email inboxes for agents. Create inboxes, send and receive emails, automate email workflows, and create accounts with AgentID.",
+      "description": "Give your agent its own email address, separate from your mailbox. Create inboxes, send and receive email, automate email workflows, and create accounts with AgentID.",
       "category": "productivity"
     }
   ]

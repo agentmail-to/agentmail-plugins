@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "agentmail",
   "displayName": "AgentMail",
-  "version": "0.8.0",
-  "description": "Email inboxes for agents. Create inboxes, send and receive emails, automate email workflows, and create accounts with AgentID.",
+  "version": "0.8.1",
+  "description": "Give your agent its own email address, separate from your mailbox. Create inboxes, send and receive email, automate email workflows, and create accounts with AgentID.",
   "author": {
     "name": "AgentMail",
     "email": "support@agentmail.cc",
